@@ -1,0 +1,2405 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ReadCraft | Adaptive English Reading Studio (A2–C2)</title>
+  <style>
+    :root {
+      --bg: #f4f6f9;
+      --surface: #ffffff;
+      --surface-alt: #f8fafc;
+      --text: #1e293b;
+      --text-muted: #64748b;
+      --primary: #1d4ed8;
+      --primary-hover: #1e40af;
+      --primary-light: #dbeafe;
+      --accent: #0f766e;
+      --accent-light: #ccfbf1;
+      --success: #15803d;
+      --success-bg: #dcfce7;
+      --warning: #b45309;
+      --warning-bg: #fef3c7;
+      --danger: #b91c1c;
+      --danger-bg: #fee2e2;
+      --border: #e2e8f0;
+      --radius: 12px;
+      --shadow: 0 4px 16px rgba(15, 23, 42, 0.06);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Inter, sans-serif;
+      background-color: var(--bg);
+      color: var(--text);
+      line-height: 1.6;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* Top Header Navigation */
+    header {
+      background: var(--surface);
+      border-bottom: 1px solid var(--border);
+      padding: 0.75rem 1.5rem;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 1rem;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+
+    .brand-logo {
+      width: 38px;
+      height: 38px;
+      border-radius: 10px;
+      background: linear-gradient(135deg, var(--primary), var(--accent));
+      color: #fff;
+      font-weight: 800;
+      font-size: 1.2rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      letter-spacing: -0.5px;
+    }
+
+    .brand-title h1 {
+      font-size: 1.2rem;
+      font-weight: 800;
+      color: var(--text);
+      line-height: 1.1;
+    }
+
+    .brand-title span {
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      font-weight: 500;
+    }
+
+    .stats-bar {
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+      flex-wrap: wrap;
+    }
+
+    .stat-pill {
+      background: var(--surface-alt);
+      border: 1px solid var(--border);
+      padding: 0.35rem 0.75rem;
+      border-radius: 999px;
+      font-size: 0.82rem;
+      font-weight: 600;
+      color: var(--text);
+      display: flex;
+      align-items: center;
+      gap: 0.35rem;
+    }
+
+    .level-pill {
+      background: var(--primary-light);
+      color: var(--primary);
+      border-color: #bfdbfe;
+      font-weight: 700;
+    }
+
+    .nav-actions {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      flex-wrap: wrap;
+    }
+
+    button {
+      cursor: pointer;
+      font-family: inherit;
+      font-size: 0.88rem;
+      font-weight: 600;
+      border-radius: 8px;
+      padding: 0.5rem 0.9rem;
+      border: 1px solid transparent;
+      transition: all 0.15s ease;
+    }
+
+    .btn-primary {
+      background: var(--primary);
+      color: #fff;
+    }
+    .btn-primary:hover {
+      background: var(--primary-hover);
+    }
+
+    .btn-outline {
+      background: var(--surface);
+      border-color: var(--border);
+      color: var(--text);
+    }
+    .btn-outline:hover {
+      background: var(--surface-alt);
+      border-color: #cbd5e1;
+    }
+
+    .btn-accent {
+      background: var(--accent);
+      color: #fff;
+    }
+    .btn-accent:hover {
+      opacity: 0.92;
+    }
+
+    /* Main Container */
+    main {
+      flex: 1;
+      max-width: 1280px;
+      width: 100%;
+      margin: 0 auto;
+      padding: 1.5rem;
+    }
+
+    .hidden {
+      display: none !important;
+    }
+
+    /* Welcome / Placement Onboarding Card */
+    .welcome-card {
+      max-width: 680px;
+      margin: 2rem auto;
+      background: var(--surface);
+      border-radius: var(--radius);
+      border: 1px solid var(--border);
+      box-shadow: var(--shadow);
+      padding: 2.25rem;
+    }
+
+    .welcome-card h2 {
+      font-size: 1.6rem;
+      margin-bottom: 0.5rem;
+    }
+
+    .welcome-card p {
+      color: var(--text-muted);
+      margin-bottom: 1.5rem;
+    }
+
+    .setup-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1.25rem;
+      margin-top: 1.25rem;
+    }
+
+    @media (max-width: 640px) {
+      .setup-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .setup-box {
+      background: var(--surface-alt);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 1.25rem;
+    }
+
+    .setup-box h3 {
+      font-size: 1rem;
+      margin-bottom: 0.4rem;
+    }
+
+    .setup-box p {
+      font-size: 0.85rem;
+      margin-bottom: 0.9rem;
+    }
+
+    .input-field {
+      width: 100%;
+      padding: 0.6rem 0.75rem;
+      border: 1px solid #cbd5e1;
+      border-radius: 8px;
+      font-size: 0.92rem;
+      margin-bottom: 0.75rem;
+      font-family: inherit;
+    }
+
+    /* Split-Screen Reading & Question Workspace */
+    .workspace-grid {
+      display: grid;
+      grid-template-columns: 1.25fr 1fr;
+      gap: 1.5rem;
+      align-items: start;
+    }
+
+    @media (max-width: 960px) {
+      .workspace-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .passage-panel {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      padding: 2rem;
+    }
+
+    .passage-meta {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+      margin-bottom: 1rem;
+      padding-bottom: 0.85rem;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .meta-tags {
+      display: flex;
+      gap: 0.5rem;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+
+    .tag {
+      font-size: 0.75rem;
+      font-weight: 700;
+      padding: 0.25rem 0.6rem;
+      border-radius: 6px;
+      text-transform: uppercase;
+      letter-spacing: 0.4px;
+    }
+
+    .tag-level {
+      background: var(--primary-light);
+      color: var(--primary);
+    }
+
+    .tag-genre {
+      background: var(--accent-light);
+      color: var(--accent);
+    }
+
+    .tag-words {
+      background: var(--surface-alt);
+      color: var(--text-muted);
+      border: 1px solid var(--border);
+    }
+
+    .vocab-hint {
+      font-size: 0.78rem;
+      color: var(--accent);
+      font-weight: 600;
+    }
+
+    .passage-title {
+      font-size: 1.5rem;
+      font-weight: 800;
+      margin-bottom: 1.15rem;
+      color: #0f172a;
+      line-height: 1.3;
+    }
+
+    .passage-body {
+      font-family: Georgia, "Times New Roman", serif;
+      font-size: 1.08rem;
+      line-height: 1.8;
+      color: #1e293b;
+    }
+
+    .passage-body p {
+      margin-bottom: 1.1rem;
+    }
+
+    /* Clickable Vocabulary Words */
+    .vocab-word {
+      border-bottom: 2px dotted var(--accent);
+      color: #0f172a;
+      cursor: pointer;
+      padding: 0 2px;
+      border-radius: 3px;
+      transition: background 0.15s;
+    }
+
+    .vocab-word:hover,
+    .vocab-word.active-vocab {
+      background-color: var(--accent-light);
+    }
+
+    /* Floating Vocabulary Definition Card */
+    .vocab-popover {
+      margin-top: 1.25rem;
+      background: #f0fdfa;
+      border: 1px solid #99f6e4;
+      border-left: 4px solid var(--accent);
+      border-radius: 8px;
+      padding: 0.9rem 1.1rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 1rem;
+    }
+
+    .vocab-popover-title {
+      font-weight: 800;
+      color: var(--accent);
+      font-size: 0.98rem;
+      margin-bottom: 0.2rem;
+    }
+
+    .vocab-popover-en {
+      font-size: 0.9rem;
+      color: var(--text);
+      margin-bottom: 0.2rem;
+    }
+
+    .vocab-popover-no {
+      font-size: 0.84rem;
+      color: var(--text-muted);
+      font-style: italic;
+    }
+
+    /* Question Panel */
+    .question-panel {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      padding: 1.75rem;
+      position: sticky;
+      top: 5.2rem;
+    }
+
+    .q-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 0.75rem;
+    }
+
+    .q-progress-text {
+      font-size: 0.85rem;
+      font-weight: 700;
+      color: var(--text-muted);
+      text-transform: uppercase;
+    }
+
+    .q-skill-badge {
+      font-size: 0.75rem;
+      font-weight: 700;
+      background: #f1f5f9;
+      color: #475569;
+      padding: 0.2rem 0.6rem;
+      border-radius: 999px;
+    }
+
+    .q-dots {
+      display: flex;
+      gap: 0.4rem;
+      margin-bottom: 1.25rem;
+    }
+
+    .q-dot {
+      flex: 1;
+      height: 6px;
+      border-radius: 99px;
+      background: #e2e8f0;
+    }
+    .q-dot.current {
+      background: var(--primary);
+    }
+    .q-dot.correct {
+      background: var(--success);
+    }
+    .q-dot.wrong {
+      background: var(--danger);
+    }
+
+    .q-prompt {
+      font-size: 1.08rem;
+      font-weight: 700;
+      margin-bottom: 1.15rem;
+      color: var(--text);
+    }
+
+    .options-list {
+      display: flex;
+      flex-direction: column;
+      gap: 0.65rem;
+    }
+
+    .option-btn {
+      text-align: left;
+      background: var(--surface-alt);
+      border: 1.5px solid var(--border);
+      border-radius: 10px;
+      padding: 0.85rem 1rem;
+      font-size: 0.95rem;
+      font-weight: 500;
+      color: var(--text);
+      display: flex;
+      align-items: flex-start;
+      gap: 0.75rem;
+      transition: all 0.15s ease;
+    }
+
+    .option-btn:hover:not(:disabled) {
+      border-color: var(--primary);
+      background: #eff6ff;
+    }
+
+    .option-btn:disabled {
+      cursor: default;
+    }
+
+    .option-letter {
+      font-weight: 800;
+      color: var(--primary);
+      min-width: 22px;
+    }
+
+    .option-btn.selected-correct {
+      background: var(--success-bg);
+      border-color: var(--success);
+      color: #14532d;
+    }
+
+    .option-btn.selected-wrong {
+      background: var(--danger-bg);
+      border-color: var(--danger);
+      color: #7f1d1d;
+    }
+
+    .option-btn.reveal-correct {
+      border-color: var(--success);
+      background: #f0fdf4;
+    }
+
+    /* Immediate Explanation Feedback Box */
+    .feedback-box {
+      margin-top: 1.25rem;
+      padding: 1.1rem;
+      border-radius: 10px;
+      border: 1px solid var(--border);
+    }
+
+    .feedback-box.correct {
+      background: var(--success-bg);
+      border-color: #86efac;
+      color: #14532d;
+    }
+
+    .feedback-box.wrong {
+      background: var(--warning-bg);
+      border-color: #fde68a;
+      color: #78350f;
+    }
+
+    .feedback-title {
+      font-weight: 800;
+      font-size: 0.96rem;
+      margin-bottom: 0.35rem;
+    }
+
+    .feedback-text {
+      font-size: 0.9rem;
+      margin-bottom: 0.9rem;
+    }
+
+    /* End of Passage Adaptive Result Box */
+    .passage-complete-box {
+      text-align: center;
+      padding: 1rem 0.5rem;
+    }
+
+    .score-circle {
+      width: 88px;
+      height: 88px;
+      border-radius: 50%;
+      background: var(--primary-light);
+      color: var(--primary);
+      font-size: 1.5rem;
+      font-weight: 800;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 1rem;
+    }
+
+    /* Modals (Session Summary & Teacher Studio) */
+    .modal-backdrop {
+      position: fixed;
+      inset: 0;
+      background: rgba(15, 23, 42, 0.55);
+      z-index: 200;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 1.25rem;
+      overflow-y: auto;
+    }
+
+    .modal-card {
+      background: var(--surface);
+      border-radius: var(--radius);
+      max-width: 760px;
+      width: 100%;
+      max-height: 90vh;
+      overflow-y: auto;
+      padding: 2rem;
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+    }
+
+    .modal-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 1px solid var(--border);
+      padding-bottom: 1rem;
+      margin-bottom: 1.25rem;
+    }
+
+    .summary-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+      gap: 0.85rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .summary-stat-card {
+      background: var(--surface-alt);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 0.9rem;
+      text-align: center;
+    }
+
+    .summary-stat-card .val {
+      font-size: 1.4rem;
+      font-weight: 800;
+      color: var(--primary);
+    }
+
+    .summary-stat-card .lbl {
+      font-size: 0.78rem;
+      color: var(--text-muted);
+      font-weight: 600;
+    }
+
+    .skill-row {
+      margin-bottom: 0.75rem;
+    }
+
+    .skill-row-header {
+      display: flex;
+      justify-content: space-between;
+      font-size: 0.85rem;
+      font-weight: 600;
+      margin-bottom: 0.25rem;
+    }
+
+    .skill-bar-bg {
+      height: 8px;
+      background: #e2e8f0;
+      border-radius: 99px;
+      overflow: hidden;
+    }
+
+    .skill-bar-fill {
+      height: 100%;
+      background: var(--primary);
+      border-radius: 99px;
+    }
+
+    .verification-banner {
+      margin-top: 1.25rem;
+      background: #f8fafc;
+      border: 1px dashed #94a3b8;
+      border-radius: 8px;
+      padding: 0.85rem 1rem;
+      font-family: monospace;
+      font-size: 0.86rem;
+      display: flex;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+    }
+
+    textarea.input-field {
+      min-height: 110px;
+      resize: vertical;
+    }
+
+    @media print {
+      header, #workspace-screen, #welcome-screen, .no-print {
+        display: none !important;
+      }
+      .modal-backdrop {
+        position: static;
+        background: none;
+        padding: 0;
+      }
+      .modal-card {
+        box-shadow: none;
+        max-height: none;
+        border: 1px solid #000;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- TOP HEADER -->
+  <header>
+    <div class="brand">
+      <div class="brand-logo">RC</div>
+      <div class="brand-title">
+        <h1>ReadCraft</h1>
+        <span>Adaptive English Reading Studio (A2–C2)</span>
+      </div>
+    </div>
+
+    <div class="stats-bar">
+      <div class="stat-pill level-pill" id="current-level-badge">Level: Placement</div>
+      <div class="stat-pill" id="stat-passages">Passages: 0</div>
+      <div class="stat-pill" id="stat-accuracy">Accuracy: --%</div>
+      <div class="stat-pill" id="stat-words">Words Read: 0</div>
+    </div>
+
+    <div class="nav-actions">
+      <button class="btn-outline" id="btn-summary" type="button">📊 Session Summary</button>
+      <button class="btn-outline" id="btn-teacher" type="button">🛠️ Teacher Studio</button>
+    </div>
+  </header>
+
+  <main>
+    <!-- VIEW 1: WELCOME & PLACEMENT / RESUME SCREEN -->
+    <section id="welcome-screen" class="welcome-card">
+      <h2>Welcome to ReadCraft</h2>
+      <p>Read engaging texts in English, click underlined words for instant English &amp; Norwegian definitions, and answer comprehension questions that adapt to your reading level from CEFR A2 up to C2.</p>
+
+      <label for="student-name-input" style="font-weight:700; font-size:0.9rem; display:block; margin-bottom:0.35rem;">Your First Name or Initials (for your Session Summary Card):</label>
+      <input type="text" id="student-name-input" class="input-field" placeholder="e.g., Emil S." maxlength="32" />
+
+      <div class="setup-grid">
+        <div class="setup-box">
+          <h3>🚀 New Session</h3>
+          <p>Take a short 200-word placement passage so ReadCraft can find your ideal starting level.</p>
+          <button class="btn-primary" id="btn-start-placement" type="button" style="width:100%;">Start Placement Passage</button>
+        </div>
+
+        <div class="setup-box">
+          <h3>🔑 Have a Resume Code?</h3>
+          <p>Enter a code from a previous session to continue at your saved CEFR level.</p>
+          <input type="text" id="resume-code-input" class="input-field" placeholder="e.g., RC-B2-4-82" />
+          <button class="btn-outline" id="btn-apply-resume" type="button" style="width:100%;">Load Resume Code</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- VIEW 2: MAIN READING & COMPREHENSION WORKSPACE -->
+    <section id="workspace-screen" class="workspace-grid hidden">
+      <!-- Left Column: Reading Passage -->
+      <article class="passage-panel">
+        <div class="passage-meta">
+          <div class="meta-tags">
+            <span class="tag tag-level" id="passage-level-tag">CEFR B1</span>
+            <span class="tag tag-genre" id="passage-genre-tag">Non-Fiction</span>
+            <span class="tag tag-words" id="passage-wordcount-tag">210 words</span>
+          </div>
+          <span class="vocab-hint">💡 Click dotted words for definitions</span>
+        </div>
+
+        <h2 class="passage-title" id="passage-title">Passage Title</h2>
+        <div class="passage-body" id="passage-body"></div>
+
+        <!-- Clickable Vocabulary Definition Box -->
+        <div id="vocab-tooltip" class="vocab-popover hidden">
+          <div>
+            <div class="vocab-popover-title" id="vocab-word">word</div>
+            <div class="vocab-popover-en" id="vocab-en">English definition</div>
+            <div class="vocab-popover-no" id="vocab-no">Norsk forklaring</div>
+          </div>
+          <button class="btn-outline" type="button" id="btn-close-vocab" style="padding:0.25rem 0.55rem; font-size:0.78rem;">✕</button>
+        </div>
+      </article>
+
+      <!-- Right Column: Interactive Questions & Immediate Feedback -->
+      <aside class="question-panel">
+        <div id="question-container">
+          <div class="q-header">
+            <span class="q-progress-text" id="q-progress-text">Question 1 of 4</span>
+            <span class="q-skill-badge" id="q-skill-badge">Inference</span>
+          </div>
+          <div class="q-dots" id="q-dots"></div>
+          <div class="q-prompt" id="q-prompt">Question prompt goes here?</div>
+          <div class="options-list" id="q-options"></div>
+
+          <!-- Immediate Feedback Box -->
+          <div id="q-feedback-box" class="feedback-box hidden">
+            <div class="feedback-title" id="q-feedback-title">Correct!</div>
+            <div class="feedback-text" id="q-feedback-text">Explanation text.</div>
+            <button class="btn-primary" id="btn-next-question" type="button" style="width:100%;">Continue →</button>
+          </div>
+        </div>
+
+        <!-- Passage Complete Summary Box -->
+        <div id="passage-complete-box" class="passage-complete-box hidden">
+          <div class="score-circle" id="pc-score">100%</div>
+          <h3 id="pc-decision-badge" style="font-size:1.25rem; margin-bottom:0.5rem;">Level Up!</h3>
+          <p id="pc-message" style="color:var(--text-muted); font-size:0.93rem; margin-bottom:1.25rem;"></p>
+          <button class="btn-primary" id="btn-next-passage" type="button" style="width:100%;">Next Adaptive Passage →</button>
+        </div>
+      </aside>
+    </section>
+  </main>
+
+  <!-- MODAL 1: SESSION SUMMARY CARD (FOR TEACHER SHARING) -->
+  <div id="summary-modal" class="modal-backdrop hidden">
+    <div class="modal-card">
+      <div class="modal-header">
+        <div>
+          <h2 style="font-size:1.35rem;">ReadCraft — Student Session Summary</h2>
+          <span id="sum-date" style="font-size:0.82rem; color:var(--text-muted);"></span>
+        </div>
+        <button class="btn-outline no-print" id="btn-close-summary" type="button">✕ Close</button>
+      </div>
+
+      <div class="summary-grid">
+        <div class="summary-stat-card">
+          <div class="val" id="sum-student-name">Student</div>
+          <div class="lbl">Reader</div>
+        </div>
+        <div class="summary-stat-card">
+          <div class="val" id="sum-level-journey">B1 → B2</div>
+          <div class="lbl">CEFR Progression</div>
+        </div>
+        <div class="summary-stat-card">
+          <div class="val" id="sum-passages">0</div>
+          <div class="lbl">Passages Completed</div>
+        </div>
+        <div class="summary-stat-card">
+          <div class="val" id="sum-accuracy">0%</div>
+          <div class="lbl">Overall Accuracy</div>
+        </div>
+        <div class="summary-stat-card">
+          <div class="val" id="sum-words">0</div>
+          <div class="lbl">Total Words Read</div>
+        </div>
+        <div class="summary-stat-card">
+          <div class="val" id="sum-time">0 min</div>
+          <div class="lbl">Active Reading Time</div>
+        </div>
+      </div>
+
+      <h3 style="font-size:0.98rem; margin-bottom:0.75rem;">Comprehension Breakdown by Skill</h3>
+      <div id="sum-skill-bars"></div>
+
+      <div class="verification-banner">
+        <span id="sum-resume-code">Resume Code: RC-B1-0-0</span>
+        <span id="sum-verify-code">Verification: #RC-0000</span>
+      </div>
+
+      <div class="no-print" style="display:flex; gap:0.75rem; margin-top:1.25rem; flex-wrap:wrap;">
+        <button class="btn-primary" id="btn-copy-summary" type="button">📋 Copy Summary Text</button>
+        <button class="btn-accent" id="btn-print-summary" type="button">🖨️ Print / Save PDF</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL 2: BUILT-IN TEACHER STUDIO -->
+  <div id="teacher-modal" class="modal-backdrop hidden">
+    <div class="modal-card">
+      <div class="modal-header">
+        <div>
+          <h2 style="font-size:1.35rem;">🛠️ ReadCraft Teacher Studio</h2>
+          <span style="font-size:0.82rem; color:var(--text-muted);">Add new passages, generate AI JSON passages, and export an updated single-file HTML for your students.</span>
+        </div>
+        <button class="btn-outline" id="btn-close-teacher" type="button">✕ Close</button>
+      </div>
+
+      <div style="background:var(--surface-alt); border:1px solid var(--border); border-radius:10px; padding:1.15rem; margin-bottom:1.25rem;">
+        <h3 style="font-size:1rem; margin-bottom:0.4rem;">✨ Quick Add via AI or JSON</h3>
+        <p style="font-size:0.85rem; color:var(--text-muted); margin-bottom:0.75rem;">
+          Click <strong>Copy AI Prompt Template</strong>, paste it into ChatGPT or Gemini with your desired topic and CEFR level (A2–C2), then paste the resulting JSON below to add it to your library.
+        </p>
+        <div style="display:flex; gap:0.5rem; margin-bottom:0.75rem; flex-wrap:wrap;">
+          <button class="btn-outline" id="btn-ts-copy-prompt" type="button">📋 Copy AI Prompt Template</button>
+          <span id="ts-bank-count" style="font-size:0.83rem; color:var(--accent); font-weight:700; align-self:center;"></span>
+        </div>
+        <textarea id="ts-json-import" class="input-field" placeholder='Paste a passage JSON object or array here (includes clickable [word|English|Norwegian] definitions and questions)...'></textarea>
+        <div style="display:flex; gap:0.6rem; flex-wrap:wrap;">
+          <button class="btn-primary" id="btn-ts-import-json" type="button">➕ Add Passage(s) to Library</button>
+          <button class="btn-accent" id="btn-ts-export-html" type="button">💾 Download Updated readcraft.html File</button>
+        </div>
+        <div id="ts-status-msg" style="margin-top:0.6rem; font-size:0.85rem; font-weight:600;"></div>
+      </div>
+
+      <h3 style="font-size:0.96rem; margin-bottom:0.5rem;">Current Passage Library (<span id="ts-total-count">0</span> Passages)</h3>
+      <div id="ts-passage-list" style="max-height:220px; overflow-y:auto; border:1px solid var(--border); border-radius:8px; padding:0.6rem; font-size:0.85rem;"></div>
+    </div>
+  </div>
+
+  <script>
+    // =========================================================================
+    // PART 2: PLACEMENT DIAGNOSTIC & PASSAGE LIBRARY (A2 - B2)
+    // =========================================================================
+
+    const PLACEMENT_PASSAGE = {
+      id: "placement-1",
+      level: "Placement",
+      genre: "Non-Fiction",
+      title: "The Doomsday Vault in the Arctic",
+      paragraphs: [
+        "Deep inside a frozen mountain on the island of Spitsbergen in Svalbard, Norway, sits one of the most important buildings on Earth. Known as the Global Seed Vault, this underground [facility|a building or place built for a specific purpose|anlegg / bygning] protects the world's food supply. Inside its icy chambers, millions of seeds from almost every country are stored in airtight foil packages.",
+        "Why do scientists go to such lengths to hide ordinary seeds in the [permafrost|ground that stays completely frozen all year round|permafrost / evig tele]? Across the globe, natural disasters, plant diseases, and wars can easily [wipe out|destroy completely|utslette / ødelegge helt] local crops. If a country loses a vital variety of wheat, rice, or potato, farmers can request replacement seeds from Svalbard to start over.",
+        "Engineers chose Svalbard for several clever reasons. First, the island is [remote|far away from cities and other people|avsidesliggende], making it safe from most human conflicts. Second, even if the vault's electric cooling systems fail, the surrounding arctic rock stays naturally below freezing. Although the media often calls it the 'Doomsday Vault,' the scientists who manage it see it differently: not as a monument to fear, but as an insurance policy for humanity's future."
+      ],
+      questions: [
+        {
+          skill: "Literal",
+          prompt: "Where is the Global Seed Vault located?",
+          options: [
+            "Deep inside a mountain on the island of Spitsbergen",
+            "Underneath the ocean near the North Pole",
+            "In a large greenhouse in southern Norway",
+            "On top of a glacier in Greenland"
+          ],
+          correct: 0,
+          explanation: "Paragraph 1 directly states that the vault sits 'deep inside a frozen mountain on the island of Spitsbergen in Svalbard, Norway.'"
+        },
+        {
+          skill: "Vocabulary",
+          prompt: "In paragraph 2, what does the phrase 'wipe out' most closely mean?",
+          options: [
+            "Wash with clean water",
+            "Destroy completely",
+            "Grow much faster",
+            "Move to another country"
+          ],
+          correct: 1,
+          explanation: "'Wipe out' means to destroy completely. The sentence explains that disasters and wars can destroy local crops."
+        },
+        {
+          skill: "Literal",
+          prompt: "What happens if the electric cooling system inside the vault stops working?",
+          options: [
+            "The seeds immediately sprout and grow",
+            "Solar panels on the roof heat the building",
+            "The naturally frozen mountain rock keeps the seeds cold",
+            "Ships must move the seeds to the mainland within 24 hours"
+          ],
+          correct: 2,
+          explanation: "Paragraph 3 explains that even if electric cooling fails, 'the surrounding arctic rock stays naturally below freezing.'"
+        },
+        {
+          skill: "Inference",
+          prompt: "What can we infer about why many different countries send seeds to the same vault?",
+          options: [
+            "Countries are forced by law to give away all their farm food",
+            "No single country is completely safe from future crop disasters",
+            "Seeds only grow after they have been frozen in the Arctic",
+            "Spitsbergen has the best soil in the world for outdoor farming"
+          ],
+          correct: 1,
+          explanation: "Because disasters or disease can strike anywhere, countries store backup seeds in Svalbard as a shared safety net."
+        },
+        {
+          skill: "Main Idea",
+          prompt: "Why do the scientists at the end of the passage disagree with the nickname 'Doomsday Vault'?",
+          options: [
+            "They believe the vault is too small to survive a real disaster",
+            "They view the vault as a hopeful backup plan rather than a symbol of hopelessness",
+            "They want to keep the location of the building a complete secret from the media",
+            "They only store flower seeds rather than food crops"
+          ],
+          correct: 1,
+          explanation: "The final sentence contrasts 'a monument to fear' (Doomsday) with 'an insurance policy for humanity's future,' showing a hopeful, protective purpose."
+        }
+      ]
+    };
+
+    /*__PASSAGE_DATA_START__*/
+    let PASSAGE_BANK = [
+      // ======================== CEFR A2 (50 - 100 words) ========================
+      {
+        id: "a2-1",
+        level: "A2",
+        genre: "Fiction",
+        title: "A Night Under the Northern Lights",
+        paragraphs: [
+          "Lukas zipped up his thick winter jacket and stepped outside the small wooden [cabin|a small wooden house in nature|hytte]. The air in Tromsø was freezing, and the snow made a loud crunch under his boots.",
+          "His older sister, Maja, pointed up at the dark sky. At first, Lukas only saw bright stars. Suddenly, a green [ribbon|a long, narrow strip of something|bånd / stripe] of light appeared above the mountains. It moved slowly like a wave in the ocean. Lukas forgot all about his cold fingers and smiled."
+        ],
+        questions: [
+          {
+            skill: "Literal",
+            prompt: "Where are Lukas and Maja in this story?",
+            options: [
+              "Inside a school classroom",
+              "Outside a cabin in Tromsø",
+              "On a boat in the summer",
+              "At a train station in Oslo"
+            ],
+            correct: 1,
+            explanation: "Paragraph 1 says Lukas stepped outside the small wooden cabin in Tromsø."
+          },
+          {
+            skill: "Vocabulary",
+            prompt: "The text says a green 'ribbon' of light appeared. What did the light look like?",
+            options: [
+              "A long, narrow band in the sky",
+              "A loud flash of lightning",
+              "A bright yellow sun",
+              "A heavy grey rain cloud"
+            ],
+            correct: 0,
+            explanation: "A ribbon is a long, narrow strip, describing the shape of the northern lights."
+          },
+          {
+            skill: "Inference",
+            prompt: "Why did Lukas forget about his cold fingers at the end?",
+            options: [
+              "He went back inside the warm cabin",
+              "He put on heated gloves",
+              "He was amazed by the beauty of the green lights",
+              "The weather suddenly became warm"
+            ],
+            correct: 2,
+            explanation: "Watching the green light move across the sky was so exciting that he stopped noticing the cold."
+          }
+        ]
+      },
+      {
+        id: "a2-2",
+        level: "A2",
+        genre: "Non-Fiction",
+        title: "Why Do Cats Purr?",
+        paragraphs: [
+          "Most people know that cats [purr|make a low, continuous vibrating sound|male (som en katt)] when they are happy and warm on your lap. However, scientists have discovered that cats also purr when they are scared or [injured|hurt or harmed physically|skadet].",
+          "Why do they do this? A cat's purr creates a low [vibration|a fast, gentle shaking movement|vibrasjon / risting] between 20 and 140 Hz. Amazingly, this exact sound frequency helps bones and muscles heal faster. So when a cat purrs, it is not just smiling—it might also be helping its own body recover."
+        ],
+        questions: [
+          {
+            skill: "Literal",
+            prompt: "Besides feeling happy, when else do cats purr?",
+            options: [
+              "Only when they are chasing mice",
+              "When they are scared or injured",
+              "When they are swimming in water",
+              "Only when they are asleep at night"
+            ],
+            correct: 1,
+            explanation: "Paragraph 1 explains that cats also purr when they are scared or injured."
+          },
+          {
+            skill: "Vocabulary",
+            prompt: "What does the word 'injured' mean in paragraph 1?",
+            options: [
+              "Very hungry",
+              "Physically hurt",
+              "Playful and energetic",
+              "Fast asleep"
+            ],
+            correct: 1,
+            explanation: "'Injured' means hurt or harmed physically."
+          },
+          {
+            skill: "Main Idea",
+            prompt: "What is the main point of this text?",
+            options: [
+              "Cats make better pets than dogs",
+              "Purring is both a sign of happiness and a way for cats to heal",
+              "Cats only purr when humans give them food",
+              "Veterinarians do not know how cats make sounds"
+            ],
+            correct: 1,
+            explanation: "The passage explains that purring shows happiness and also uses vibrations to help heal bones and muscles."
+          }
+        ]
+      },
+      {
+        id: "a2-3",
+        level: "A2",
+        genre: "Fiction",
+        title: "The Missing Bus Card",
+        paragraphs: [
+          "Nora checked her backpack three times, but her bus card was [nowhere|not in any place|ingen steder] to be found. The school bus was already coming down the street, and the morning rain was getting heavier.",
+          "Just as the bus doors opened, the driver looked at her [anxious|worried and nervous|bekymret / nervøs] face. 'Take a seat and stay dry,' he said kindly. 'You can show me your card tomorrow.' When Nora sat down and reached into her raincoat pocket for a tissue, her fingers touched a smooth piece of plastic. She laughed quietly to herself."
+        ],
+        questions: [
+          {
+            skill: "Literal",
+            prompt: "Where did Nora look for her bus card first?",
+            options: [
+              "In her backpack",
+              "Under her bed",
+              "On the bus floor",
+              "In her school locker"
+            ],
+            correct: 0,
+            explanation: "The first sentence says 'Nora checked her backpack three times.'"
+          },
+          {
+            skill: "Vocabulary",
+            prompt: "What does the word 'anxious' mean in paragraph 2?",
+            options: [
+              "Angry and loud",
+              "Worried and nervous",
+              "Sleepy and bored",
+              "Proud and confident"
+            ],
+            correct: 1,
+            explanation: "Nora was worried ('anxious') because she thought she had lost her bus card in the rain."
+          },
+          {
+            skill: "Inference",
+            prompt: "What was the 'smooth piece of plastic' in Nora's raincoat pocket?",
+            options: [
+              "A broken pen",
+              "A piece of candy",
+              "Her missing bus card",
+              "A small mirror"
+            ],
+            correct: 2,
+            explanation: "Her bus card had been in her raincoat pocket the whole time, which is why she laughed quietly to herself."
+          }
+        ]
+      },
+
+      // ======================== CEFR B1 (150 - 250 words) ========================
+      {
+        id: "b1-1",
+        level: "B1",
+        genre: "Fiction",
+        title: "The Skateboarder Who Cleaned the Fjord",
+        paragraphs: [
+          "Every afternoon after school, fourteen-year-old Sander practiced skateboard tricks along the concrete [pier|a platform sticking out into the water|brygge / kai] in Bergen. One windy Tuesday, his board flipped over the edge and splashed straight into the shallow water below. Borrowing a long boat hook from a nearby fisherman, Sander reached down to rescue his board—and pulled up an old bicycle wheel tangled in green plastic rope instead.",
+          "Curious, he leaned over the railing and noticed dozens of rusted cans, plastic bottles, and lost fishing nets resting on the sea floor. The water looked clean from a distance, but up close it was acting like a hidden [landfill|a place where rubbish is buried or dumped|søppelfylling].",
+          "The next weekend, Sander returned with two friends and a strong [neodymium|a powerful type of magnet|kraftig magnet] magnet tied to a climbing rope. Within three hours, they had pulled up forty kilograms of scrap metal and plastic. Passersby stopped to watch, and a local café owner brought them warm cinnamon buns. By the end of the month, their Saturday 'Magnet Fishing Club' had twelve members and support from the city harbour office."
+        ],
+        questions: [
+          {
+            skill: "Literal",
+            prompt: "How did Sander first discover the rubbish at the bottom of the fjord?",
+            options: [
+              "He went scuba diving with his school science class",
+              "He was trying to fish his skateboard out of the water",
+              "A local café owner asked him to clean the harbour",
+              "He read an article about water pollution in the newspaper"
+            ],
+            correct: 1,
+            explanation: "Paragraph 1 states that his skateboard splashed into the water, and when he tried to hook it, he pulled up a bicycle wheel and plastic rope."
+          },
+          {
+            skill: "Vocabulary",
+            prompt: "Why does the author compare the bottom of the harbour to a 'landfill' in paragraph 2?",
+            options: [
+              "Because the water was very shallow and dry",
+              "Because it was full of discarded rubbish and waste",
+              "Because fishermen kept their boats tied there",
+              "Because plants were growing rapidly on the rocks"
+            ],
+            correct: 1,
+            explanation: "A landfill is a dumping ground for trash. Seeing cans, bottles, and nets made the sea floor look like a hidden rubbish dump."
+          },
+          {
+            skill: "Inference",
+            prompt: "Why did the café owner bring the teenagers warm cinnamon buns?",
+            options: [
+              "Sander had paid for the buns earlier that morning",
+              "To thank and encourage them for cleaning up the local area",
+              "Because the teenagers worked at the café on Saturdays",
+              "To trade the food for the scrap metal they found"
+            ],
+            correct: 1,
+            explanation: "The café owner saw their hard work removing 40 kg of trash and brought them buns as a kind gesture of appreciation."
+          },
+          {
+            skill: "Main Idea",
+            prompt: "Which statement best summarizes the main theme of the story?",
+            options: [
+              "Skateboarding near water is too dangerous for teenagers",
+              "A small accident can inspire young people to make a positive community change",
+              "City governments never clean up harbours without magnets",
+              "Fishing is the most popular weekend hobby in Bergen"
+            ],
+            correct: 1,
+            explanation: "An accidental skateboard drop led Sander and his friends to start a club that made a real environmental difference."
+          }
+        ]
+      },
+      {
+        id: "b1-2",
+        level: "B1",
+        genre: "Non-Fiction",
+        title: "How Video Games Train Your Brain",
+        paragraphs: [
+          "For decades, parents warned teenagers that playing video games was a complete waste of time. While staring at a screen for eight hours a day is certainly unhealthy, modern [neuroscience|the scientific study of the brain and nervous system|hjerneforskning / nevrovitenskap] reveals a more balanced picture. In moderate amounts, certain games actually strengthen important mental skills.",
+          "When players navigate complex 3D worlds or fast-paced strategy games, their brains must process visual information and make decisions in fractions of a second. Studies show that regular gamers often develop stronger [spatial awareness|the ability to judge positions and distances of objects|romforståelse]—the ability to mentally rotate objects and judge distances. In fact, one famous medical study found that young surgeons who played video games for a few hours a week made fewer errors when performing keyhole surgery with tiny cameras.",
+          "Additionally, multiplayer cooperative games require players to communicate clearly, divide tasks, and adapt when a plan fails. The key, researchers say, is [moderation|doing something in reasonable, balanced amounts|måtehold / balanse]: one hour of gaming can sharpen your focus, provided it does not replace sleep, physical exercise, or face-to-face friendships."
+        ],
+        questions: [
+          {
+            skill: "Literal",
+            prompt: "According to paragraph 2, what surprising group performed better in a medical study if they played video games?",
+            options: [
+              "High school bus drivers",
+              "Young surgeons performing camera-guided surgery",
+              "Professional chess players",
+              "Hospital nurses working night shifts"
+            ],
+            correct: 1,
+            explanation: "Paragraph 2 mentions a medical study showing that young surgeons who played games made fewer errors during keyhole surgery."
+          },
+          {
+            skill: "Vocabulary",
+            prompt: "What does 'moderation' mean in the final paragraph?",
+            options: [
+              "Playing only the newest and most expensive games",
+              "Doing something within healthy, balanced limits",
+              "Competing in professional online tournaments",
+              "Quitting an activity completely forever"
+            ],
+            correct: 1,
+            explanation: "Moderation means keeping an activity balanced so it doesn't crowd out sleep, exercise, or friendships."
+          },
+          {
+            skill: "Inference",
+            prompt: "Why would 'spatial awareness' be useful for a surgeon using a tiny camera?",
+            options: [
+              "It helps the surgeon stay awake for 24 hours without coffee",
+              "It helps the surgeon judge 3D distances while looking at a 2D screen",
+              "It allows the surgeon to type patient notes much faster",
+              "It makes the hospital equipment run on less electricity"
+            ],
+            correct: 1,
+            explanation: "Both 3D gaming and keyhole surgery require moving tools accurately in 3D space while watching a flat screen."
+          },
+          {
+            skill: "Main Idea",
+            prompt: "What is the author's overall attitude toward video games?",
+            options: [
+              "Strictly negative—teenagers should ban all screens immediately",
+              "Unconditionally positive—eight hours of gaming daily makes everyone smarter",
+              "Balanced—moderate gaming builds real cognitive skills as long as daily habits stay healthy",
+              "Uncertain—scientists have never studied how games affect the brain"
+            ],
+            correct: 2,
+            explanation: "The author highlights proven brain benefits while warning against letting gaming replace sleep, exercise, or real-life social time."
+          }
+        ]
+      },
+      {
+        id: "b1-3",
+        level: "B1",
+        genre: "Fiction",
+        title: "Whiteout on Hardangervidda",
+        paragraphs: [
+          "When Astrid and her father left the mountain lodge at ten o'clock that morning, the April sky was clear and bright blue. By noon, however, a fierce wind swept across the flat [plateau|a large area of high, fairly flat land|høyslette / vidde], whipping loose snow into a blinding wall of white. Within ten minutes, they could barely see the tips of their own skis.",
+          "Astrid felt her heart beat faster as the tracks ahead of them [vanished|disappeared completely|forsvant]. 'Should we keep moving toward the next cabin?' she shouted over the howling wind.",
+          "Her father shook his head and pointed to the red wooden trail markers, which were already fading into the fog. 'In a whiteout, wasting energy is the biggest danger,' he said calmly, sliding his backpack off his shoulders. Pull out the metal snow shovel and the orange [bivouac|a temporary emergency shelter tent|vindsekk / nødbivuakk] sack. Instead of fighting the storm, they dug a deep trench into a snowdrift, climbed inside the windproof sack, and shared warm blackcurrant toddy from a thermos until the wind died down two hours later."
+        ],
+        questions: [
+          {
+            skill: "Literal",
+            prompt: "How did the weather change around noon?",
+            options: [
+              "Heavy rain melted all the snow on the trail",
+              "Strong winds blew snow into a blinding whiteout",
+              "The temperature rose to twenty degrees",
+              "Dark night fell six hours early"
+            ],
+            correct: 1,
+            explanation: "Paragraph 1 says that by noon, a fierce wind whipped loose snow into a blinding wall of white."
+          },
+          {
+            skill: "Vocabulary",
+            prompt: "In paragraph 2, the ski tracks 'vanished.' What happened to them?",
+            options: [
+              "They turned into solid ice",
+              "They disappeared under the blowing snow",
+              "They led straight back to the car park",
+              "They became wider and easier to follow"
+            ],
+            correct: 1,
+            explanation: "'Vanished' means disappeared completely."
+          },
+          {
+            skill: "Inference",
+            prompt: "What can we infer about Astrid's father from his actions?",
+            options: [
+              "He had never skied in the mountains before",
+              "He was experienced and prepared with emergency mountain gear",
+              "He forgot to bring food and warm drinks on the trip",
+              "He panicked and lost his backpack in the snow"
+            ],
+            correct: 1,
+            explanation: "He stayed calm, knew not to waste energy in a whiteout, and carried a shovel, bivouac sack, and warm thermos."
+          },
+          {
+            skill: "Main Idea",
+            prompt: "What lesson does this story illustrate about mountain safety?",
+            options: [
+              "Never go skiing in the month of April",
+              "Skiing faster is the best way to escape a snowstorm",
+              "Respecting the weather and stopping to shelter is safer than forcing your way through a storm",
+              "Cell phones are the only tool needed on Hardangervidda"
+            ],
+            correct: 2,
+            explanation: "Instead of risking getting lost by pushing forward, stopping to dig a shelter kept them safe and warm."
+          }
+        ]
+      },
+
+      // ======================== CEFR B2 (300 - 450 words) ========================
+      {
+        id: "b2-1",
+        level: "B2",
+        genre: "Non-Fiction",
+        title: "The Hidden Price Tag of Ultra-Fast Fashion",
+        paragraphs: [
+          "Scroll through almost any social media feed today and you will see 'haul' videos where influencers unpack dozens of brand-new shirts, hoodies, and trousers that cost less than a takeaway pizza. Thirty years ago, clothing brands released four seasonal collections a year: spring, summer, autumn, and winter. Today, 'ultra-fast fashion' companies upload thousands of new designs to their apps every single week, turning trends into [disposable|intended to be thrown away after brief use|bruk-og-kast / engangs-] products that many buyers wear only once or twice.",
+          "How can a t-shirt travel from a factory thousands of kilometres away to a teenager's bedroom in Norway for just 60 kroner? The low price at the checkout hides heavy environmental and human costs. To keep fabric cheap, manufacturers rely heavily on [synthetic|made by chemical processes rather than natural fibres|kunstig / syntetisk] fibres like polyester, which is derived from crude oil. Every time a polyester hoodie is washed, it sheds thousands of microscopic plastic threads—known as microplastics—that flow through wastewater pipes and into the ocean.",
+          "Even natural materials carry a large footprint. Producing enough cotton for a single pair of jeans can require up to 7,000 litres of water, often in regions already struggling with drought. Meanwhile, garment workers in crowded factories frequently work long shifts for wages that barely cover basic food and rent. When millions of unwanted clothes are eventually thrown away, less than one percent of the material is actually recycled into new clothing; the vast majority ends up burned in [incinerators|furnaces built for burning waste at high temperatures|forbrenningsanlegg] or piled into massive textile dumps in the Global South.",
+          "Fortunately, consumer habits are beginning to shift. Across Scandinavia, second-hand apps, clothes-swapping events, and repair workshops are growing in popularity among young people. Before clicking 'buy,' many shoppers now apply the '30-wear test': asking themselves whether they will realistically wear that item at least thirty times."
+        ],
+        questions: [
+          {
+            skill: "Literal",
+            prompt: "How does modern 'ultra-fast fashion' differ from how clothing brands operated thirty years ago?",
+            options: [
+              "Brands thirty years ago only sold clothes made from recycled ocean plastic",
+              "Modern ultra-fast brands release thousands of new styles weekly instead of four seasonal collections a year",
+              "Clothes today are much more expensive and last for several decades",
+              "Modern brands no longer use cotton or polyester in their factories"
+            ],
+            correct: 1,
+            explanation: "Paragraph 1 contrasts the four seasonal collections of thirty years ago with thousands of weekly designs today."
+          },
+          {
+            skill: "Vocabulary",
+            prompt: "In paragraph 1, what does calling trends 'disposable' suggest about how people treat these clothes?",
+            options: [
+              "They treat them as valuable family heirlooms",
+              "They use them briefly and throw them away without much thought",
+              "They wash them by hand using cold water",
+              "They only wear them for formal occasions"
+            ],
+            correct: 1,
+            explanation: "'Disposable' refers to items meant to be thrown away after only one or two uses."
+          },
+          {
+            skill: "Literal",
+            prompt: "According to paragraph 2, how does polyester clothing contribute to ocean pollution?",
+            options: [
+              "It requires 7,000 litres of seawater to dye each shirt",
+              "It releases tiny plastic threads into wastewater every time it is washed",
+              "Polyester dissolves completely the first time it gets wet in the rain",
+              "Ships carrying cotton sink frequently in the Atlantic Ocean"
+            ],
+            correct: 1,
+            explanation: "Paragraph 2 explains that polyester is a synthetic plastic fibre that sheds microplastics into wastewater during washing."
+          },
+          {
+            skill: "Inference",
+            prompt: "Why does the title refer to a 'Hidden Price Tag'?",
+            options: [
+              "Online stores hide shipping taxes until the final payment screen",
+              "Paper price tags are sewn inside the collar where buyers cannot see them",
+              "Although the buyer pays very little money, the environment and factory workers pay a severe cost",
+              "Second-hand clothing is secretly much more expensive than designer brands"
+            ],
+            correct: 2,
+            explanation: "The 'hidden price' isn't paid in kroner at checkout—it is paid through water depletion, microplastics, waste, and low factory wages."
+          },
+          {
+            skill: "Main Idea",
+            prompt: "What is the purpose of the '30-wear test' mentioned in the final paragraph?",
+            options: [
+              "To test whether a washing machine can clean thirty shirts at once",
+              "To encourage shoppers to buy only clothes they will genuinely use long-term",
+              "To require factories to test fabrics thirty times before shipping",
+              "To limit teenagers to owning thirty items of clothing in total"
+            ],
+            correct: 1,
+            explanation: "Asking yourself if you'll wear an item 30 times helps prevent impulse buying of disposable clothes."
+          }
+        ]
+      },
+      {
+        id: "b2-2",
+        level: "B2",
+        genre: "Fiction",
+        title: "Signal in the Deep",
+        paragraphs: [
+          "At four hundred metres below the surface of the Norwegian Sea, sunlight is only a memory. Inside the cramped control cabin of the research vessel *Nautilus Nord*, sixteen-year-old intern Emilie leaned closer to the sonar monitor. She was supposed to be logging water temperature data for her marine biology uncle, Dr. Holm, while the remotely operated submarine glided over the cold coral reefs below.",
+          "Suddenly, a rhythmic pulse appeared on the acoustic frequency graph: three short pings, a two-second pause, and one long ping. It repeated with mechanical [precision|exactness and accuracy|nøyaktighet / presisjon] every fifteen seconds. Natural ocean sounds—like shifting tectonic plates, cracking icebergs, or vocalizing whales—never followed a mathematical pattern that exact.",
+          "'Uncle Henrik, look at channel four,' Emilie said, trying to keep her voice steady. Dr. Holm set down his coffee mug and adjusted his glasses. As he steered the submarine's high-beam cameras toward the coordinates of the signal, the muddy seabed rose into a jagged ridge of dark basalt rock.",
+          "Half-buried in the silt lay a cylindrical titanium capsule covered in white sea anemones. Stencilled across its faded yellow hull were the letters *MET-OCEAN 1998*. Dr. Holm let out a long breath of [astonishment|great surprise and wonder|forbauselse / overraskelse]. 'That is an autonomous deep-current sensor we lost during a storm twenty-eight years ago,' he whispered. 'Its backup lithium battery was only rated for five years, yet somehow the hydrothermal vents nearby have kept its thermal generator trickle-charging all this time.'"
+        ],
+        questions: [
+          {
+            skill: "Literal",
+            prompt: "What was Emilie's original task on board the research vessel?",
+            options: [
+              "Steering the submarine through underwater caves",
+              "Logging water temperature data for her uncle",
+              "Repairing broken lithium batteries in the engine room",
+              "Photographing whales near the surface"
+            ],
+            correct: 1,
+            explanation: "Paragraph 1 states she was supposed to be logging water temperature data for her uncle, Dr. Holm."
+          },
+          {
+            skill: "Inference",
+            prompt: "How did Emilie immediately know the acoustic signal was not made by a whale or an iceberg?",
+            options: [
+              "Whales cannot swim deeper than fifty metres",
+              "The signal repeated in an exact, mathematical timing pattern",
+              "A voice spoke in Norwegian over the radio speaker",
+              "The water temperature suddenly boiled around the ship"
+            ],
+            correct: 1,
+            explanation: "Paragraph 2 notes that the pulse repeated with mechanical precision every 15 seconds, unlike natural ocean sounds."
+          },
+          {
+            skill: "Vocabulary",
+            prompt: "What does the word 'astonishment' mean in paragraph 4?",
+            options: [
+              "Deep anger and frustration",
+              "Great surprise and wonder",
+              "Extreme physical exhaustion",
+              "Quiet boredom"
+            ],
+            correct: 1,
+            explanation: "'Astonishment' means great surprise—Dr. Holm was amazed to see equipment lost 28 years ago still operating."
+          },
+          {
+            skill: "Literal",
+            prompt: "How was the lost 1998 sensor still able to transmit a signal after twenty-eight years?",
+            options: [
+              "Divers had replaced its batteries the previous summer",
+              "Sunlight at the bottom of the sea powered its solar panels",
+              "Nearby hydrothermal vents kept its thermal generator charging",
+              "It was plugged into an underwater internet cable"
+            ],
+            correct: 2,
+            explanation: "In the final sentence, Dr. Holm explains that nearby hydrothermal vents kept its thermal generator trickle-charging."
+          }
+        ]
+      },
+      {
+        id: "b2-3",
+        level: "B2",
+        genre: "Non-Fiction",
+        title: "The Psychology of Why We Procrastinate",
+        paragraphs: [
+          "You have a major history presentation due on Friday. On Tuesday afternoon, you sit down at your desk, open a blank document, and suddenly feel an urgent need to reorganize your bookshelf, clean your sneakers, or watch a twenty-minute video about deep-sea squid. Most people assume that [procrastination|delaying or putting off a task that needs to be done|utsettelse / prokrastinering] is simply a sign of laziness or poor time management. According to psychologists, however, putting things off actually has very little to do with how you manage your clock—and everything to do with how you manage your emotions.",
+          "When we face a challenging task, such as writing a difficult essay or studying for a maths exam, it often triggers subtle negative feelings: self-doubt, boredom, anxiety, or the fear of not doing a good enough job. Inside the brain, the [amygdala|the part of the brain that processes threats and emotions|amygdala (fryktsenteret i hjernen)]—our built-in threat detector—interprets that uncomfortable task as a source of stress. To protect your mood right now, your brain urges you to switch to an easy, pleasant activity that provides an immediate reward.",
+          "The problem is that this relief is only temporary. Avoiding the assignment makes the deadline loom larger, which increases guilt and stress the next day, trapping the student in a frustrating cycle. Because procrastination is an emotional reaction rather than a scheduling flaw, buying a fancier calendar rarely solves it.",
+          "Instead, researchers recommend shrinking the emotional barrier of starting. Using the 'Five-Minute Rule,' you tell yourself you only have to work on the task for five minutes; if you still want to stop when the timer rings, you have permission to quit. Simply crossing the starting line usually quiets the brain's alarm system, turning an overwhelming mountain into a manageable step."
+        ],
+        questions: [
+          {
+            skill: "Main Idea",
+            prompt: "According to psychologists in the text, what is the true root cause of procrastination?",
+            options: [
+              "Not owning a detailed paper or digital calendar",
+              "An attempt to avoid uncomfortable emotions like anxiety or self-doubt",
+              "A physical lack of sleep during the school week",
+              "Having too many school holidays throughout the year"
+            ],
+            correct: 1,
+            explanation: "Paragraphs 1 and 2 explain that procrastination is an emotional regulation issue—our brains avoid tasks that trigger stress or self-doubt."
+          },
+          {
+            skill: "Vocabulary",
+            prompt: "What role does the 'amygdala' play in procrastination, according to paragraph 2?",
+            options: [
+              "It helps you memorize historical dates and vocabulary words",
+              "It detects the difficult task as a stressful threat and pushes you to seek comfort",
+              "It controls the muscles in your hands while typing",
+              "It makes you feel energetic early in the morning"
+            ],
+            correct: 1,
+            explanation: "The passage defines the amygdala as our built-in threat detector that views a stressful task as something to escape."
+          },
+          {
+            skill: "Inference",
+            prompt: "Why does the author state that 'buying a fancier calendar rarely solves' procrastination?",
+            options: [
+              "Paper calendars are too expensive for most teenagers",
+              "Students already know *when* their work is due; the real obstacle is the anxiety of starting",
+              "Digital apps delete homework assignments automatically",
+              "Teachers change deadlines every single day"
+            ],
+            correct: 1,
+            explanation: "Since procrastination is driven by emotions rather than forgetting the date, a new schedule doesn't fix the emotional barrier."
+          },
+          {
+            skill: "Inference",
+            prompt: "Why does the 'Five-Minute Rule' work so effectively on the brain?",
+            options: [
+              "All school essays can be completely finished in five minutes",
+              "Working for only five minutes feels non-threatening, which calms the brain's stress response and builds momentum",
+              "It tricks the teacher into grading only the first paragraph",
+              "It forces you to clean your bedroom before opening your computer"
+            ],
+            correct: 1,
+            explanation: "A tiny five-minute commitment lowers the emotional threat so the brain's alarm system quiets down once you begin."
+          }
+        ]
+      },
+
+      // ======================== CEFR C1 (450 - 600 words) ========================
+      {
+        id: "c1-1",
+        level: "C1",
+        genre: "Non-Fiction",
+        title: "The Architecture of Attention: How Algorithms Shape What We Value",
+        paragraphs: [
+          "Every time you pause for three seconds on a video, re-read a controversial comment, or skip past a news article, an invisible ledger records your hesitation. In the twenty-first-century digital economy, the scarcest resource is no longer information—which exists in overwhelming abundance—but human attention. While traditional newspapers and television broadcasts offered the same front page or evening programme to millions of citizens simultaneously, modern social platforms rely on predictive [algorithms|step-by-step computational rules used to solve problems or sort data|algoritmer] to construct a uniquely tailored reality for each individual user.",
+          "At first glance, such personalization appears entirely [benign|gentle, harmless, and well-intentioned|ufarlig / godartet]. Why waste time scrolling through topics that bore you when an intelligent system can surface tutorials on acoustic guitar, highlights from Norwegian football, or astrophysics explainers within seconds? Yet the underlying commercial incentive of these platforms introduces a subtle distortion. Because advertising revenue depends on 'time on site,' algorithms are not optimized to show you what is most accurate, nuanced, or enriching; they are engineered to show you whatever provokes the strongest immediate impulse to keep watching.",
+          "Behavioural psychologists have repeatedly demonstrated that human attention is disproportionately captured by moral outrage, tribal conflict, and novel extremes. Consequently, a calm, balanced discussion about energy policy or historical complexity rarely travels as fast through a recommendation engine as a polarizing [caricature|an exaggerated or oversimplified portrayal of something|karikatur / vrengebilde] of the same issue. Over months of subtle reinforcement, users can find themselves enclosed within an epistemic bubble—an environment where familiar assumptions are constantly [corroborated|confirmed or supported by additional evidence|bekreftet / underbygget] while dissenting perspectives are either filtered out or presented only in their most unreasonable forms.",
+          "Reclaiming cognitive [autonomy|the capacity to make independent, self-governed decisions|selvstendighet / autonomi] does not require abandoning digital life altogether, nor retreating to a cabin without electricity. Rather, it demands that we treat our attention with the same deliberate care we apply to our physical diet. By intentionally seeking out long-form journalism, reading authors with whom we thoughtfully disagree, and disabling autoplay features designed to erode our sense of time, we shift from being passive raw material for an algorithm to active architects of our own minds."
+        ],
+        questions: [
+          {
+            skill: "Literal",
+            prompt: "According to paragraph 1, what has replaced information as the scarcest resource in the modern digital economy?",
+            options: [
+              "High-speed satellite internet",
+              "Human attention",
+              "Traditional printed newspapers",
+              "Computer storage capacity"
+            ],
+            correct: 1,
+            explanation: "Paragraph 1 explicitly states that 'the scarcest resource is no longer information—which exists in overwhelming abundance—but human attention.'"
+          },
+          {
+            skill: "Vocabulary",
+            prompt: "In paragraph 2, the author writes that personalization appears 'benign' at first glance. What does 'benign' mean in this context?",
+            options: [
+              "Harmless and beneficial",
+              "Secretly illegal and dangerous",
+              "Mathematically impossible to calculate",
+              "Outdated and inefficient"
+            ],
+            correct: 0,
+            explanation: "'Benign' means harmless or well-intentioned—getting recommendations for your hobbies seems helpful until the deeper trade-offs appear."
+          },
+          {
+            skill: "Inference",
+            prompt: "Why do recommendation engines often amplify exaggerated or polarizing content over calm, nuanced analysis?",
+            options: [
+              "Software engineers manually read and approve every angry comment",
+              "Nuanced articles use too much battery power on mobile phones",
+              "Outrage and extremes trigger stronger impulses to stay on the app, which maximizes ad revenue",
+              "Users are required to pay a subscription fee to view calm discussions"
+            ],
+            correct: 2,
+            explanation: "Paragraphs 2 and 3 explain that platforms optimize for 'time on site' and ad revenue, and human attention is most strongly hooked by moral outrage and extremes."
+          },
+          {
+            skill: "Vocabulary",
+            prompt: "In paragraph 3, what happens when a user's existing assumptions are constantly 'corroborated' inside an epistemic bubble?",
+            options: [
+              "They are challenged and disproven by scientific data",
+              "They are repeatedly confirmed and reinforced",
+              "They are translated into multiple foreign languages",
+              "They are deleted from the platform's servers"
+            ],
+            correct: 1,
+            explanation: "'Corroborated' means confirmed or supported—inside a filter bubble, you mostly see posts that agree with what you already believe."
+          },
+          {
+            skill: "Main Idea",
+            prompt: "Why does the author compare managing our attention to managing our physical diet in the final paragraph?",
+            options: [
+              "Because scrolling on a phone burns as many calories as running",
+              "To argue that schools should ban both smartphones and cafeterias",
+              "To emphasize that we must consciously choose nourishing mental input rather than passively consuming whatever algorithms feed us",
+              "To show that social media companies are investing heavily in grocery stores"
+            ],
+            correct: 2,
+            explanation: "Just as fast food is engineered to be addictive, algorithmic feeds are engineered for impulse; reclaiming autonomy requires deliberate, healthy choices."
+          }
+        ]
+      },
+      {
+        id: "c1-2",
+        level: "C1",
+        genre: "Fiction",
+        title: "The Cartographer of Vanishing Ice",
+        paragraphs: [
+          "At nearly two thousand metres above sea level in Jotunheimen, the wind carried the metallic scent of wet slate and ancient snow. Fifteen-year-old Linnea crouched beside her aunt Signe, a glacial archaeologist whose leather notebook was already specked with sleet. Before them stretched the grey-blue tongue of the ice patch—forty metres narrower than the dashed red boundary line printed on Signe's 1984 topographical map.",
+          "'People think of ice as restless, grinding everything beneath it into powder,' Signe said, adjusting the tripod of her laser [theodolite|a precision optical instrument used for measuring angles in surveying|teodolitt (måleinstrument)]. 'Mountain glaciers certainly do that when they flow down steep valleys. But high-altitude ice patches like this one are stationary. They sit frozen to the bedrock like a time capsule, preserving fragile organic material without crushing it—until a warm summer peels back the centuries.'",
+          "Linnea stepped carefully across the meltwater rivulets trickling over the frost-shattered stones. Every metre of newly exposed rock represented a chronological paradox: the further inward toward the shrinking core of the ice she walked, the deeper into Norwegian prehistory she travelled. Near the outer perimeter lay a rusted ration tin from the 1940s; twenty paces closer to the ice edge, Signe's team had flagged a medieval horseshoe the previous afternoon.",
+          "Just where the translucent blue margin of the ice met the dark gravel, something pale caught the [diffuse|spread out and soft, not harsh or direct|spredt / diffus] mountain light. Linnea knelt, resisting the urge to touch it with her bare fingers. Resting on a flat slab of gneiss was a slender birchwood arrow shaft, its bindings of sinew and a single dark eagle feather still remarkably intact after being locked in the dark for over three millennia. Looking from the fragile feather to the retreating wall of ice, Linnea felt a strange [ambivalence|having two opposing feelings at the same time|ambivalens / blandede følelser]: the thrill of witnessing a message from the Bronze Age, paired with the sobering realization that the library holding it was melting away."
+        ],
+        questions: [
+          {
+            skill: "Literal",
+            prompt: "According to Signe in paragraph 2, how do high-altitude stationary ice patches differ from valley glaciers?",
+            options: [
+              "Stationary ice patches never melt, even during hot summers",
+              "Stationary ice patches freeze to the bedrock without flowing, preserving fragile objects instead of crushing them",
+              "Valley glaciers are much smaller and only form during the springtime",
+              "Stationary ice patches are made of frozen saltwater rather than snow"
+            ],
+            correct: 1,
+            explanation: "Signe explains that while valley glaciers flow and grind things into powder, high-altitude ice patches sit stationary on the bedrock, preserving delicate items intact."
+          },
+          {
+            skill: "Inference",
+            prompt: "Why does the narrator describe walking toward the shrinking core of the ice patch as a 'chronological paradox' in paragraph 3?",
+            options: [
+              "Watches and compasses stop working at two thousand metres above sea level",
+              "Walking a short physical distance forward moves you thousands of years backward in historical time",
+              "Older artifacts are always found at the outermost edge while newer items are trapped in the centre",
+              "The ice patch grows larger during the summer and smaller during the winter"
+            ],
+            correct: 1,
+            explanation: "Because the oldest ice is at the core, walking just a few paces inward takes you from the 1940s to the Middle Ages and finally to the Bronze Age."
+          },
+          {
+            skill: "Literal",
+            prompt: "Why did Linnea avoid touching the birchwood arrow shaft with her bare hands?",
+            options: [
+              "The wood was covered in poisonous mountain moss",
+              "She was following archaeological care to avoid damaging or contaminating a fragile ancient artifact",
+              "Her aunt had forbidden her from looking at the ground",
+              "The arrow shaft was still frozen solid inside a ten-metre wall of ice"
+            ],
+            correct: 1,
+            explanation: "As an assistant to a glacial archaeologist, she knew that a 3,000-year-old organic artifact of wood, sinew, and feather is extremely delicate."
+          },
+          {
+            skill: "Vocabulary",
+            prompt: "What does the word 'ambivalence' capture about Linnea's reaction at the end of the story?",
+            options: [
+              "Complete indifference and boredom toward history",
+              "Simultaneous feelings of excitement over the discovery and sadness over the melting ice",
+              "Sudden physical dizziness caused by the high mountain altitude",
+              "Confidence that the glacier would grow back to its 1984 boundary next week"
+            ],
+            correct: 1,
+            explanation: "'Ambivalence' means experiencing two conflicting emotions at once: awe at seeing a Bronze Age arrow, and sorrow that climate warming is destroying the ice that preserved it."
+          },
+          {
+            skill: "Main Idea",
+            prompt: "What does the metaphor 'the library holding it was melting away' in the final sentence signify?",
+            options: [
+              "A local museum in Jotunheimen was damaged by a leaking roof",
+              "Ancient people buried printed books inside mountain glaciers",
+              "The ice patch serves as an irreplaceable archive of human history that is disappearing as temperatures rise",
+              "Archaeologists prefer reading books indoors rather than working in the sleet"
+            ],
+            correct: 2,
+            explanation: "The author compares the ice patch to a historical library storing centuries of artifacts—once the ice melts and exposes organic items to air and weather, they quickly decay if not found in time."
+          }
+        ]
+      },
+
+      // ======================== CEFR C2 (600 - 750+ words) ========================
+      {
+        id: "c2-1",
+        level: "C2",
+        genre: "Non-Fiction",
+        title: "The Ship of Theseus in the Age of Neural Interfaces",
+        paragraphs: [
+          "In classical antiquity, the Greek biographer Plutarch posed a philosophical riddle that has haunted metaphysicians for two millennia. Suppose the wooden ship sailed by the mythical hero Theseus is preserved in an Athenian harbour as a national monument. Over the decades, as individual oak planks rot and succumb to sea-spray, Athenian shipwrights replace them one by one with fresh timber until, eventually, not a single splinter of the original vessel remains. Is the restored craft still the Ship of Theseus, or has it imperceptibly become an entirely different object wearing an inherited name? And if a thrifty scavenger had gathered every discarded, rotting plank and reassembled them in a neighbouring shipyard, which vessel could legitimately claim original identity?",
+          "For centuries, this paradox remained a purely [esoteric|intended for or understood by only a small group with specialized knowledge|esoterisk / for spesielt interesserte] exercise for seminar rooms. Today, however, advances in restorative neuroscience and brain-computer interfaces (BCIs) are transforming Plutarch's thought experiment into an urgent clinical and ethical question. Already, hundreds of thousands of patients worldwide live with cochlear implants that translate acoustic waves into electrical signals for the auditory nerve, or deep-brain stimulators that quiet the tremors of Parkinson's disease. More recently, experimental cortical arrays have enabled paralysed individuals to compose sentences on a screen or manoeuvre robotic limbs merely by imagining the movement of their own hands.",
+          "While these early interventions bridge damaged pathways between the brain and the body's periphery, the next frontier of neuro-engineering aims at the [substrate|the underlying layer or substance on which processes occur|underlag / fundament] of cognition itself. Researchers are currently testing prosthetic hippocampal microchips designed to mimic the neural circuitry responsible for encoding short-term memories into long-term storage—a potential lifeline for patients suffering from Alzheimer's disease or traumatic brain injury. At the level of compassionate medicine, the objective is unimpeachable: restoring a person's capacity to recognize their grandchildren or navigate their own neighbourhood.",
+          "Yet as silicon components begin to participate directly in memory consolidation, emotional regulation, and decision-making, the boundary between assistive tool and personal identity grows increasingly porous. When we use an external smartphone to look up a forgotten historical date, we effortlessly distinguish between our biological mind and the instrument in our palm. If, however, an implanted neural co-processor seamlessly supplies that memory—or subtly [modulates|adjusts, regulates, or tempers the degree of something|modulerer / regulerer] an impulsive burst of anger before it reaches conscious awareness—who is the author of the resulting thought?",
+          "Philosophers of mind refer to the 'extended mind thesis,' which argues that human cognition has never been strictly confined within the skull; from Mesopotamian clay tablets to modern notebooks, we have always offloaded mental labour onto our environment. Nevertheless, internalizing those tools inside the blood-brain barrier introduces unprecedented vulnerabilities. Biological memories, for all their notorious fallibility, fade and reconstruct themselves organically, allowing human beings to forgive, recontextualize trauma, and mature. A digital memory prosthesis, by contrast, raises the spectre of unyielding, pixel-perfect recall—or, conversely, the terrifying possibility that one's most intimate recollections could be subject to software bugs, proprietary corporate updates, or external manipulation.",
+          "Ultimately, the lesson of the Ship of Theseus may be that identity was never anchored in static material components to begin with, whether oak planks or biological neurons, but in the continuous, self-organizing pattern of their relationships. Even our natural brains replace cellular proteins constantly while maintaining a coherent sense of self. The decisive ethical challenge of the coming century is therefore not whether integrating machine intelligence into the human nervous system renders us 'artificial,' but how we safeguard moral agency and mental privacy when the workshop repairing the ship belongs to someone else."
+        ],
+        questions: [
+          {
+            skill: "Literal",
+            prompt: "Why does the author introduce Plutarch's paradox of the Ship of Theseus in the opening paragraphs?",
+            options: [
+              "To explain how ancient Greek shipbuilders preserved oak timber against saltwater decay",
+              "To frame the modern philosophical dilemma of whether human identity changes as biological brain functions are replaced by neural implants",
+              "To argue that antique wooden monuments should never be repaired with modern materials",
+              "To demonstrate that ancient philosophers already knew how to build electrical brain implants"
+            ],
+            correct: 1,
+            explanation: "The author uses the gradual replacement of planks in Theseus's ship as an analogy for replacing biological neural pathways with silicon prosthetics."
+          },
+          {
+            skill: "Vocabulary",
+            prompt: "In paragraph 2, the paradox is described as having been an 'esoteric' exercise for centuries. What does 'esoteric' mean?",
+            options: [
+              "Widely celebrated in popular entertainment",
+              "Abstract and confined to a small circle of specialists",
+              "Mathematically proven beyond any doubt",
+              "Financially profitable for commercial engineers"
+            ],
+            correct: 1,
+            explanation: "'Esoteric' means understood by or relevant to only a small, specialized group (like philosophy seminars) before modern neuroscience made it practical."
+          },
+          {
+            skill: "Inference",
+            prompt: "According to paragraphs 3 and 4, what distinguishes next-generation hippocampal prosthetics from earlier devices like cochlear implants or smartphones?",
+            options: [
+              "Hippocampal prosthetics are worn externally like a wristwatch rather than implanted",
+              "They operate directly inside the processes of memory formation and cognition, blurring the line between tool and self",
+              "They are designed exclusively for healthy teenagers rather than medical patients",
+              "They require no electricity or software to function"
+            ],
+            correct: 1,
+            explanation: "While cochlear implants bridge sensory input and smartphones sit outside the body, hippocampal chips participate directly in encoding memories and shaping thought."
+          },
+          {
+            skill: "Inference",
+            prompt: "In paragraph 5, why does the author suggest that the 'fallibility' (imperfection) of biological memory can actually be beneficial?",
+            options: [
+              "Forgetting allows students to avoid studying for academic examinations",
+              "The natural fading and softening of memories helps humans process trauma, forgive, and grow emotionally",
+              "Imperfect memories use far more glucose than silicon microchips",
+              "Biological neurons never change once a person reaches adulthood"
+            ],
+            correct: 1,
+            explanation: "Paragraph 5 notes that biological memories fade and reconstruct organically, 'allowing human beings to forgive, recontextualize trauma, and mature,' unlike rigid digital storage."
+          },
+          {
+            skill: "Main Idea",
+            prompt: "What does the author conclude in the final paragraph is the most critical ethical issue surrounding future neural interfaces?",
+            options: [
+              "Proving that a person with a medical implant is no longer legally human",
+              "Banning all neurological research for Alzheimer's and Parkinson's disease",
+              "Protecting personal autonomy and mental privacy when external companies design and maintain the hardware inside our minds",
+              "Replacing every biological neuron in the human brain before age thirty"
+            ],
+            correct: 2,
+            explanation: "The final sentence concludes that identity can survive changing parts, so the real challenge is safeguarding 'moral agency and mental privacy when the workshop repairing the ship belongs to someone else.'"
+          }
+        ]
+      },
+      {
+        id: "c2-2",
+        level: "C2",
+        genre: "Non-Fiction",
+        title: "Rewilding the Anthropocene: The Ecological Paradox of Trophic Cascades",
+        paragraphs: [
+          "For much of the twentieth century, conservation biology operated like an emergency museum curator: its primary ambition was to fence off picturesque fragments of wilderness and preserve them in a static, snapshot state. Over the past three decades, however, ecologists have increasingly embraced a more dynamic paradigm known as 'rewilding.' Rather than micromanaging individual plant or animal populations in isolation, rewilding seeks to restore self-regulating ecosystems by reintroducing missing 'keystone species'—organisms whose ecological influence is disproportionately large relative to their numerical abundance.",
+          "The classic textbook illustration of this phenomenon is the [trophic cascade|an ecological process triggered at the top of the food chain that ripples down to the bottom|trofisk kaskade (ringvirkninger i næringskjeden)], famously observed after grey wolves were reintroduced to Yellowstone National Park in 1995 following a seventy-year absence. During the decades without apex predators, elk populations had multiplied unchecked, congregating lazily along riverbanks where they stripped young willow and aspen shoots bare. The return of a relatively small number of wolves altered not only the size of the elk herds, but—more crucially—their behaviour. Forced into constant vigilance in what ecologists term an 'ecology of fear,' elk avoided exposed valley bottoms. Within years, riverside saplings regenerated, stabilizing eroded riverbanks, shading the water for cold-water fish, and providing habitat for songbirds and beavers.",
+          "Yet as subsequent field research has refined this narrative, scientists have cautioned against treating apex predators as a miraculous ecological [panacea|a cure-all or universal solution for all difficulties|universalmiddel / mirakelkur]. In regions where human activity has fundamentally altered hydrology or climate over decades, simply dropping a predator back into the landscape does not automatically rewind the ecological clock. In parts of Colorado and northern Europe, for instance, where water tables have dropped and beavers have long vanished, excluding grazing deer from riverbanks has failed to revive willow thickets because the underlying soil conditions have shifted irreversibly into a new state.",
+          "Nowhere is the tension between ecological theory and social reality more acute than across the Scandinavian peninsula. Here, the resurgence of strictly protected carnivores—such as wolves, wolverines, and Eurasian lynx—collides directly with centuries-old cultural landscapes, including free-range sheep grazing and indigenous Sámi reindeer [pastoralism|a way of life based on herding livestock across open grazing lands|reindrift / beitebruk]. To an urban conservationist in Oslo or Stockholm, a wolf pack represents the triumphant healing of primeval nature; to a rural herder whose livelihood and cultural heritage depend on open mountain pastures, the same predator can represent an existential burden imposed by distant bureaucrats.",
+          "This [dichotomy|a sharp division or contrast between two things that are represented as opposed|dikotomi / todeling] exposes a deeper philosophical flaw in how modern societies conceptualize 'wilderness.' Almost no landscape in Europe is truly untouched by human history; heather moorlands, alpine meadows, and boreal forests have been co-shaped by human grazing, fire management, and hunting since the end of the last Ice Age. Consequently, twenty-first-century ecology can neither retreat into the illusion of a human-free wilderness nor accept the sterile homogenization of industrial land use. Navigating the Anthropocene requires a humble coexistence—one that pairs scientific reverence for complex food webs with democratic respect for the rural communities who actually inhabit them."
+        ],
+        questions: [
+          {
+            skill: "Literal",
+            prompt: "How does the modern concept of 'rewilding' differ from twentieth-century conservation approaches described in paragraph 1?",
+            options: [
+              "Twentieth-century conservation focused on breeding apex predators in city zoos",
+              "Rewilding aims to restore self-sustaining ecological processes via keystone species rather than freezing landscapes in a static snapshot",
+              "Rewilding prohibits all scientific observation inside national parks",
+              "Twentieth-century conservation sought to remove all trees from river valleys"
+            ],
+            correct: 1,
+            explanation: "Paragraph 1 contrasts the old 'museum curator' model of keeping a static snapshot with rewilding's goal of restoring dynamic, self-regulating food webs."
+          },
+          {
+            skill: "Inference",
+            prompt: "In the Yellowstone example (paragraph 2), what was the critical mechanism through which wolves helped songbirds and beavers return?",
+            options: [
+              "Wolves hunted and removed invasive fish from the rivers",
+              "Wolves planted willow seeds carried in their fur across the mountains",
+              "By making elk too cautious to linger along riverbanks, wolves allowed young trees to grow back and restore river habitats",
+              "Wolves built dams across streams to raise the water table directly"
+            ],
+            correct: 2,
+            explanation: "Through the 'ecology of fear,' wolves kept elk moving away from valley bottoms, allowing riverside willow and aspen saplings to recover and provide habitat for beavers and birds."
+          },
+          {
+            skill: "Vocabulary",
+            prompt: "Why do scientists in paragraph 3 warn against viewing apex predators as an ecological 'panacea'?",
+            options: [
+              "Because predators are an endangered disease vector in cold climates",
+              "Because reintroducing predators alone cannot fix every ecosystem if water tables and soil conditions have already changed permanently",
+              "Because apex predators refuse to hunt in national parks",
+              "Because willow trees grow faster when grazed heavily by deer"
+            ],
+            correct: 1,
+            explanation: "A 'panacea' is a universal cure-all; paragraph 3 explains that predators alone cannot magically restore rivers if hydrology and soil have already shifted."
+          },
+          {
+            skill: "Inference",
+            prompt: "Why does predator conservation often spark intense conflict in Scandinavia according to paragraph 4?",
+            options: [
+              "Scandinavia has no remaining forests or mountains suitable for wildlife",
+              "Urban advocates and rural herders (such as sheep farmers and Sámi reindeer herders) experience vastly different economic and cultural consequences from predator recovery",
+              "Rural communities want to replace all native wildlife with industrial factories",
+              "Wolves and lynx only live inside major metropolitan cities"
+            ],
+            correct: 1,
+            explanation: "Paragraph 4 highlights the divide between urban conservationists who view predators symbolically and rural/Sámi pastoralists whose open-pasture livelihoods bear the direct cost."
+          },
+          {
+            skill: "Main Idea",
+            prompt: "What overarching conclusion does the author reach in the final paragraph regarding European landscapes?",
+            options: [
+              "All human agricultural and herding activity must be banned across Europe immediately",
+              "Conservation should be abandoned because nature no longer exists",
+              "Because European ecosystems have been co-shaped by humans for millennia, effective conservation must balance ecological restoration with the realities of local human communities",
+              "Keystone species only affect North American national parks and have no role in Europe"
+            ],
+            correct: 2,
+            explanation: "The author rejects the false choice ('dichotomy') between an imaginary human-free wilderness and industrial destruction, arguing for coexistence that respects both food webs and rural livelihoods."
+          }
+        ]
+      }
+    ];
+    /*__PASSAGE_DATA_END__*/
+
+    // =========================================================================
+    // PART 4: ADAPTIVE ENGINE, UI CONTROLLER & TEACHER STUDIO
+    // =========================================================================
+
+    const CEFR_LEVELS = ["A2", "B1", "B2", "C1", "C2"];
+    const STORAGE_KEY = "readcraft_state_v1";
+    const CUSTOM_BANK_KEY = "readcraft_custom_passages_v1";
+
+    let state = {
+      studentName: "",
+      startLevel: null,
+      currentLevel: "Placement",
+      passagesCompleted: 0,
+      totalQuestions: 0,
+      totalCorrect: 0,
+      wordsRead: 0,
+      completedIds: [],
+      activeSeconds: 0,
+      skills: {
+        Literal: { correct: 0, total: 0 },
+        Vocabulary: { correct: 0, total: 0 },
+        Inference: { correct: 0, total: 0 },
+        "Main Idea": { correct: 0, total: 0 }
+      }
+    };
+
+    let activePassage = null;
+    let currentQuestionIndex = 0;
+    let passageResults = []; // array of booleans for current passage
+    let timerInterval = null;
+
+    // Load custom teacher passages from localStorage if any exist
+    function loadCustomPassages() {
+      try {
+        const savedCustom = localStorage.getItem(CUSTOM_BANK_KEY);
+        if (savedCustom) {
+          const parsed = JSON.parse(savedCustom);
+          if (Array.isArray(parsed)) {
+            parsed.forEach(p => {
+              if (!PASSAGE_BANK.some(existing => existing.id === p.id)) {
+                PASSAGE_BANK.push(p);
+              }
+            });
+          }
+        }
+      } catch (e) {
+        console.warn("Could not load custom passages from localStorage:", e);
+      }
+    }
+
+    // Save/Load student progress
+    function saveState() {
+      try {
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+      } catch (e) {
+        console.warn("Storage unavailable:", e);
+      }
+    }
+
+    function loadSavedState() {
+      try {
+        const raw = localStorage.getItem(STORAGE_KEY);
+        if (!raw) return false;
+        const parsed = JSON.parse(raw);
+        if (parsed && parsed.currentLevel) {
+          state = Object.assign(state, parsed);
+          return true;
+        }
+      } catch (e) {
+        console.warn("Could not parse saved state:", e);
+      }
+      return false;
+    }
+
+    // Active reading timer
+    function startReadingTimer() {
+      if (timerInterval) clearInterval(timerInterval);
+      timerInterval = setInterval(() => {
+        if (!document.hidden && !document.getElementById("workspace-screen").classList.contains("hidden")) {
+          state.activeSeconds++;
+        }
+      }, 1000);
+    }
+
+    // Count words in a passage (stripping [word|en|no] definitions)
+    function countPassageWords(paragraphs) {
+      const cleanText = paragraphs
+        .map(p => p.replace(/\[([^|\]]+)\|[^\]]+\]/g, "$1"))
+        .join(" ")
+        .trim();
+      return cleanText ? cleanText.split(/\s+/).length : 0;
+    }
+
+    // Convert [word|English|Norwegian] syntax into clickable spans
+    function parseParagraphWithVocab(text) {
+      return text.replace(/\[([^|\]]+)\|([^|\]]+)\|([^\]]+)\]/g, (match, word, en, no) => {
+        const safeWord = word.replace(/"/g, "&quot;");
+        const safeEn = en.replace(/"/g, "&quot;");
+        const safeNo = no.replace(/"/g, "&quot;");
+        return `<span class="vocab-word" tabindex="0" data-word="${safeWord}" data-en="${safeEn}" data-no="${safeNo}">${word}</span>`;
+      });
+    }
+
+    // Update top navigation statistics bar
+    function updateHeaderStats() {
+      document.getElementById("current-level-badge").textContent =
+        state.currentLevel === "Placement" ? "Level: Placement" : `CEFR Level: ${state.currentLevel}`;
+      document.getElementById("stat-passages").textContent = `Passages: ${state.passagesCompleted}`;
+      const acc = state.totalQuestions > 0 ? Math.round((state.totalCorrect / state.totalQuestions) * 100) : null;
+      document.getElementById("stat-accuracy").textContent = `Accuracy: ${acc !== null ? acc + "%" : "--%"}`;
+      document.getElementById("stat-words").textContent = `Words Read: ${state.wordsRead.toLocaleString()}`;
+    }
+
+    // Select next passage based on current CEFR level
+    function selectNextPassage(level) {
+      if (level === "Placement") return PLACEMENT_PASSAGE;
+
+      let pool = PASSAGE_BANK.filter(p => p.level === level && !state.completedIds.includes(p.id));
+
+      // If student has read all texts at this level, look at adjacent levels or reset pool for this level
+      if (pool.length === 0) {
+        pool = PASSAGE_BANK.filter(p => p.level === level);
+      }
+
+      const randomIndex = Math.floor(Math.random() * pool.length);
+      return pool[randomIndex];
+    }
+
+    // Render a passage and its first question
+    function renderPassage(passage) {
+      activePassage = passage;
+      currentQuestionIndex = 0;
+      passageResults = [];
+
+      document.getElementById("welcome-screen").classList.add("hidden");
+      document.getElementById("workspace-screen").classList.remove("hidden");
+      document.getElementById("vocab-tooltip").classList.add("hidden");
+      document.getElementById("passage-complete-box").classList.add("hidden");
+      document.getElementById("question-container").classList.remove("hidden");
+
+      const wordCount = countPassageWords(passage.paragraphs);
+      document.getElementById("passage-level-tag").textContent =
+        passage.level === "Placement" ? "Placement Diagnostic" : `CEFR ${passage.level}`;
+      document.getElementById("passage-genre-tag").textContent = passage.genre || "Reading";
+      document.getElementById("passage-wordcount-tag").textContent = `${wordCount} words`;
+      document.getElementById("passage-title").textContent = passage.title;
+
+      const bodyEl = document.getElementById("passage-body");
+      bodyEl.innerHTML = passage.paragraphs
+        .map(p => `<p>${parseParagraphWithVocab(p)}</p>`)
+        .join("");
+
+      // Attach click events to vocabulary words
+      bodyEl.querySelectorAll(".vocab-word").forEach(span => {
+        span.addEventListener("click", () => showVocabDefinition(span));
+        span.addEventListener("keydown", e => {
+          if (e.key === "Enter" || e.key === " ") {
+            e.preventDefault();
+            showVocabDefinition(span);
+          }
+        });
+      });
+
+      renderQuestion();
+      updateHeaderStats();
+      startReadingTimer();
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    }
+
+    function showVocabDefinition(spanEl) {
+      document.querySelectorAll(".vocab-word.active-vocab").forEach(el => el.classList.remove("active-vocab"));
+      spanEl.classList.add("active-vocab");
+
+      document.getElementById("vocab-word").textContent = spanEl.dataset.word;
+      document.getElementById("vocab-en").textContent = `🇬🇧 ${spanEl.dataset.en}`;
+      document.getElementById("vocab-no").textContent = `🇳🇴 ${spanEl.dataset.no}`;
+      document.getElementById("vocab-tooltip").classList.remove("hidden");
+    }
+
+    // Render current question in right-hand panel
+    function renderQuestion() {
+      const q = activePassage.questions[currentQuestionIndex];
+      const totalQ = activePassage.questions.length;
+
+      document.getElementById("q-progress-text").textContent = `Question ${currentQuestionIndex + 1} of ${totalQ}`;
+      document.getElementById("q-skill-badge").textContent = q.skill || "Comprehension";
+      document.getElementById("q-prompt").textContent = q.prompt;
+      document.getElementById("q-feedback-box").classList.add("hidden");
+
+      // Render progress dots
+      const dotsEl = document.getElementById("q-dots");
+      dotsEl.innerHTML = "";
+      for (let i = 0; i < totalQ; i++) {
+        const dot = document.createElement("div");
+        dot.className = "q-dot";
+        if (i < passageResults.length) {
+          dot.classList.add(passageResults[i] ? "correct" : "wrong");
+        } else if (i === currentQuestionIndex) {
+          dot.classList.add("current");
+        }
+        dotsEl.appendChild(dot);
+      }
+
+      // Render answer options
+      const letters = ["A", "B", "C", "D"];
+      const optionsEl = document.getElementById("q-options");
+      optionsEl.innerHTML = "";
+
+      q.options.forEach((optText, idx) => {
+        const btn = document.createElement("button");
+        btn.type = "button";
+        btn.className = "option-btn";
+        btn.innerHTML = `<span class="option-letter">${letters[idx]}.</span><span>${optText}</span>`;
+        btn.addEventListener("click", () => handleAnswerClick(idx, btn));
+        optionsEl.appendChild(btn);
+      });
+    }
+
+    // Immediate feedback handler when student clicks an option
+    function handleAnswerClick(selectedIndex, clickedBtn) {
+      const q = activePassage.questions[currentQuestionIndex];
+      const isCorrect = selectedIndex === q.correct;
+      const optionButtons = document.querySelectorAll("#q-options .option-btn");
+
+      optionButtons.forEach((btn, idx) => {
+        btn.disabled = true;
+        if (idx === q.correct) {
+          btn.classList.add("reveal-correct");
+        }
+      });
+
+      if (isCorrect) {
+        clickedBtn.classList.remove("reveal-correct");
+        clickedBtn.classList.add("selected-correct");
+      } else {
+        clickedBtn.classList.add("selected-wrong");
+      }
+
+      // Record statistics
+      passageResults.push(isCorrect);
+      state.totalQuestions++;
+      if (isCorrect) state.totalCorrect++;
+
+      const skillKey = state.skills[q.skill] ? q.skill : "Literal";
+      state.skills[skillKey].total++;
+      if (isCorrect) state.skills[skillKey].correct++;
+
+      // Update progress dot immediately
+      const dots = document.querySelectorAll("#q-dots .q-dot");
+      if (dots[currentQuestionIndex]) {
+        dots[currentQuestionIndex].classList.remove("current");
+        dots[currentQuestionIndex].classList.add(isCorrect ? "correct" : "wrong");
+      }
+
+      // Populate and display explanation box
+      const fbBox = document.getElementById("q-feedback-box");
+      const fbTitle = document.getElementById("q-feedback-title");
+      const fbText = document.getElementById("q-feedback-text");
+      const nextBtn = document.getElementById("btn-next-question");
+
+      fbBox.className = `feedback-box ${isCorrect ? "correct" : "wrong"}`;
+      fbTitle.textContent = isCorrect ? "✓ Correct!" : "✗ Not quite right";
+      fbText.textContent = q.explanation;
+
+      if (currentQuestionIndex + 1 < activePassage.questions.length) {
+        nextBtn.textContent = "Next Question →";
+      } else {
+        nextBtn.textContent = "See Passage Results →";
+      }
+
+      fbBox.classList.remove("hidden");
+      updateHeaderStats();
+      saveState();
+    }
+
+    // Evaluate passage score and adjust CEFR reading level
+    function finishPassage() {
+      const totalQ = activePassage.questions.length;
+      const correctCount = passageResults.filter(Boolean).length;
+      const pct = Math.round((correctCount / totalQ) * 100);
+      const words = countPassageWords(activePassage.paragraphs);
+
+      state.passagesCompleted++;
+      state.wordsRead += words;
+      if (!state.completedIds.includes(activePassage.id)) {
+        state.completedIds.push(activePassage.id);
+      }
+
+      let badgeTitle = "";
+      let message = "";
+
+      if (activePassage.level === "Placement") {
+        if (pct <= 25) state.currentLevel = "A2";
+        else if (pct <= 60) state.currentLevel = "B1";
+        else if (pct <= 85) state.currentLevel = "B2";
+        else state.currentLevel = "C1";
+
+        state.startLevel = state.currentLevel;
+        badgeTitle = `Placed at CEFR ${state.currentLevel}!`;
+        message = `You answered ${correctCount} out of ${totalQ} questions correctly (${pct}%). ReadCraft has set your starting level to ${state.currentLevel}.`;
+      } else {
+        const currentIdx = CEFR_LEVELS.indexOf(state.currentLevel);
+        if (pct >= 80) {
+          if (currentIdx < CEFR_LEVELS.length - 1) {
+            const nextLevel = CEFR_LEVELS[currentIdx + 1];
+            badgeTitle = `Level Up → CEFR ${nextLevel}!`;
+            message = `Awesome work (${correctCount}/${totalQ} correct). You're ready for more challenging texts at CEFR ${nextLevel}!`;
+            state.currentLevel = nextLevel;
+          } else {
+            badgeTitle = `Mastery at CEFR C2!`;
+            message = `Outstanding (${correctCount}/${totalQ} correct)! You are reading comfortably at the highest proficiency tier (C2).`;
+          }
+        } else if (pct >= 50) {
+          badgeTitle = `Steady Progress at CEFR ${state.currentLevel}`;
+          message = `Good effort (${correctCount}/${totalQ} correct). Let's keep practicing with another text at ${state.currentLevel} to build strong confidence. Score 80%+ to advance!`;
+        } else {
+          if (currentIdx > 0) {
+            const prevLevel = CEFR_LEVELS[currentIdx - 1];
+            badgeTitle = `Stepping to CEFR ${prevLevel}`;
+            message = `You scored ${correctCount}/${totalQ} (${pct}%). Let's build momentum with a slightly more accessible passage at CEFR ${prevLevel}.`;
+            state.currentLevel = prevLevel;
+          } else {
+            badgeTitle = `Keep Practicing at CEFR A2`;
+            message = `You scored ${correctCount}/${totalQ} (${pct}%). Tip: Click the dotted words in the text for English and Norwegian definitions!`;
+          }
+        }
+      }
+
+      saveState();
+      updateHeaderStats();
+
+      document.getElementById("question-container").classList.add("hidden");
+      document.getElementById("pc-score").textContent = `${pct}%`;
+      document.getElementById("pc-decision-badge").textContent = badgeTitle;
+      document.getElementById("pc-message").textContent = message;
+      document.getElementById("passage-complete-box").classList.remove("hidden");
+    }
+
+    // Generate Resume Code & Tamper-Resistant Verification Hash
+    function generateCodes() {
+      const lvl = state.currentLevel === "Placement" ? "B1" : state.currentLevel;
+      const acc = state.totalQuestions > 0 ? Math.round((state.totalCorrect / state.totalQuestions) * 100) : 0;
+      const resumeCode = `RC-${lvl}-${state.passagesCompleted}-${acc}`;
+
+      const rawString = `${state.studentName || "Reader"}|${lvl}|${state.passagesCompleted}|${acc}|${state.wordsRead}`;
+      let hash = 0;
+      for (let i = 0; i < rawString.length; i++) {
+        hash = (hash << 5) - hash + rawString.charCodeAt(i);
+        hash |= 0;
+      }
+      const verifyCode = `#RC-${Math.abs(hash).toString(16).toUpperCase().slice(0, 5).padStart(4, "0")}`;
+      return { resumeCode, verifyCode, acc, lvl };
+    }
+
+    // Open Session Summary Modal
+    function openSummaryModal() {
+      const { resumeCode, verifyCode, acc, lvl } = generateCodes();
+      const now = new Date();
+      document.getElementById("sum-date").textContent = now.toLocaleDateString("en-GB", {
+        day: "numeric",
+        month: "short",
+        year: "numeric",
+        hour: "2-digit",
+        minute: "2-digit"
+      });
+
+      const nameInput = document.getElementById("student-name-input").value.trim();
+      if (nameInput) state.studentName = nameInput;
+
+      document.getElementById("sum-student-name").textContent = state.studentName || "Anonymous Reader";
+      const startLvl = state.startLevel || lvl;
+      document.getElementById("sum-level-journey").textContent =
+        state.currentLevel === "Placement" ? "Placement" : `${startLvl} → ${lvl}`;
+      document.getElementById("sum-passages").textContent = state.passagesCompleted;
+      document.getElementById("sum-accuracy").textContent = `${acc}%`;
+      document.getElementById("sum-words").textContent = state.wordsRead.toLocaleString();
+      document.getElementById("sum-time").textContent = `${Math.max(1, Math.round(state.activeSeconds / 60))} min`;
+
+      const skillBarsEl = document.getElementById("sum-skill-bars");
+      skillBarsEl.innerHTML = "";
+      Object.keys(state.skills).forEach(skillName => {
+        const s = state.skills[skillName];
+        const sPct = s.total > 0 ? Math.round((s.correct / s.total) * 100) : 0;
+        const labelText = s.total > 0 ? `${s.correct}/${s.total} (${sPct}%)` : "No questions yet";
+
+        const row = document.createElement("div");
+        row.className = "skill-row";
+        row.innerHTML = `
+          <div class="skill-row-header">
+            <span>${skillName}</span>
+            <span>${labelText}</span>
+          </div>
+          <div class="skill-bar-bg">
+            <div class="skill-bar-fill" style="width:${sPct}%;"></div>
+          </div>
+        `;
+        skillBarsEl.appendChild(row);
+      });
+
+      document.getElementById("sum-resume-code").textContent = `Resume Code: ${resumeCode}`;
+      document.getElementById("sum-verify-code").textContent = `Verification: ${verifyCode}`;
+      document.getElementById("summary-modal").classList.remove("hidden");
+    }
+
+    // Teacher Studio: Render Passage List & AI Prompt
+    function refreshTeacherStudio() {
+      document.getElementById("ts-total-count").textContent = PASSAGE_BANK.length;
+      const countsByLevel = CEFR_LEVELS.map(
+        l => `${l}: ${PASSAGE_BANK.filter(p => p.level === l).length}`
+      ).join(" | ");
+      document.getElementById("ts-bank-count").textContent = `Levels (${countsByLevel})`;
+
+      const listEl = document.getElementById("ts-passage-list");
+      listEl.innerHTML = PASSAGE_BANK.map(p => {
+        const wc = countPassageWords(p.paragraphs);
+        return `<div style="padding:0.4rem 0; border-bottom:1px solid var(--border); display:flex; justify-content:space-between;">
+          <span><strong>[${p.level}]</strong> ${p.title} <span style="color:var(--text-muted);">(${p.genre})</span></span>
+          <span style="color:var(--text-muted);">${wc} words • ${p.questions.length} Qs</span>
+        </div>`;
+      }).join("");
+    }
+
+    // Event Listeners Setup
+    window.addEventListener("DOMContentLoaded", () => {
+      loadCustomPassages();
+
+      if (loadSavedState() && state.passagesCompleted > 0) {
+        document.getElementById("student-name-input").value = state.studentName || "";
+        const { resumeCode } = generateCodes();
+        document.getElementById("resume-code-input").value = resumeCode;
+        updateHeaderStats();
+      }
+
+      // Start Placement Button
+      document.getElementById("btn-start-placement").addEventListener("click", () => {
+        const nameVal = document.getElementById("student-name-input").value.trim();
+        state.studentName = nameVal || "Student";
+        state.currentLevel = "Placement";
+        saveState();
+        renderPassage(PLACEMENT_PASSAGE);
+      });
+
+      // Apply Resume Code Button
+      document.getElementById("btn-apply-resume").addEventListener("click", () => {
+        const code = document.getElementById("resume-code-input").value.trim().toUpperCase();
+        const match = code.match(/^RC-(A2|B1|B2|C1|C2)-(\d+)-(\d+)$/);
+        if (!match) {
+          alert("Invalid Resume Code format. Example of a valid code: RC-B2-4-82");
+          return;
+        }
+        const nameVal = document.getElementById("student-name-input").value.trim();
+        if (nameVal) state.studentName = nameVal;
+
+        state.currentLevel = match[1];
+        state.startLevel = state.startLevel || match[1];
+        state.passagesCompleted = parseInt(match[2], 10);
+        const targetAcc = parseInt(match[3], 10);
+        if (state.totalQuestions === 0 && state.passagesCompleted > 0) {
+          state.totalQuestions = state.passagesCompleted * 4;
+          state.totalCorrect = Math.round((targetAcc / 100) * state.totalQuestions);
+        }
+        saveState();
+        renderPassage(selectNextPassage(state.currentLevel));
+      });
+
+      // Close Vocab Tooltip
+      document.getElementById("btn-close-vocab").addEventListener("click", () => {
+        document.getElementById("vocab-tooltip").classList.add("hidden");
+      });
+
+      // Next Question Button
+      document.getElementById("btn-next-question").addEventListener("click", () => {
+        if (currentQuestionIndex + 1 < activePassage.questions.length) {
+          currentQuestionIndex++;
+          renderQuestion();
+        } else {
+          finishPassage();
+        }
+      });
+
+      // Next Adaptive Passage Button
+      document.getElementById("btn-next-passage").addEventListener("click", () => {
+        const nextP = selectNextPassage(state.currentLevel);
+        renderPassage(nextP);
+      });
+
+      // Summary Modal Controls
+      document.getElementById("btn-summary").addEventListener("click", openSummaryModal);
+      document.getElementById("btn-close-summary").addEventListener("click", () => {
+        document.getElementById("summary-modal").classList.add("hidden");
+      });
+
+      document.getElementById("btn-copy-summary").addEventListener("click", () => {
+        const { resumeCode, verifyCode, acc, lvl } = generateCodes();
+        const startLvl = state.startLevel || lvl;
+        const summaryText = [
+          `ReadCraft Session Summary`,
+          `Student: ${state.studentName || "Anonymous"}`,
+          `CEFR Level Progression: ${startLvl} -> ${lvl}`,
+          `Passages Completed: ${state.passagesCompleted}`,
+          `Overall Accuracy: ${acc}% (${state.totalCorrect}/${state.totalQuestions})`,
+          `Total Words Read: ${state.wordsRead}`,
+          `Active Reading Time: ${Math.max(1, Math.round(state.activeSeconds / 60))} min`,
+          `Resume Code: ${resumeCode}`,
+          `Verification: ${verifyCode}`
+        ].join("\n");
+
+        navigator.clipboard.writeText(summaryText).then(() => {
+          const btn = document.getElementById("btn-copy-summary");
+          btn.textContent = "✓ Copied to Clipboard!";
+          setTimeout(() => (btn.textContent = "📋 Copy Summary Text"), 2000);
+        });
+      });
+
+      document.getElementById("btn-print-summary").addEventListener("click", () => {
+        window.print();
+      });
+
+      // Teacher Studio Controls
+      document.getElementById("btn-teacher").addEventListener("click", () => {
+        refreshTeacherStudio();
+        document.getElementById("teacher-modal").classList.remove("hidden");
+      });
+
+      document.getElementById("btn-close-teacher").addEventListener("click", () => {
+        document.getElementById("teacher-modal").classList.add("hidden");
+      });
+
+      document.getElementById("btn-ts-copy-prompt").addEventListener("click", () => {
+        const aiPrompt = `Create a JSON object for my adaptive English reading website (ReadCraft) for Norwegian students aged 12-15.
+Target CEFR Level: [INSERT LEVEL: A2, B1, B2, C1, or C2]
+Word Count Target: A2=70-100 words, B1=170-230 words, B2=320-420 words, C1=460-550 words, C2=620-700 words.
+Topic/Genre: [INSERT TOPIC OR GENRE]
+
+Include 3 to 5 challenging vocabulary words embedded directly inside the paragraphs using this exact syntax: [word|simple English definition|Norwegian translation].
+Include 4 to 5 multiple-choice questions covering Literal, Vocabulary, Inference, and Main Idea skills, with clear explanations.
+
+Return ONLY valid JSON matching this exact structure:
+{
+  "id": "custom-101",
+  "level": "B1",
+  "genre": "Non-Fiction",
+  "title": "Title Here",
+  "paragraphs": [
+    "First paragraph with a [clickable|able to be clicked|klikkbar] vocabulary word...",
+    "Second paragraph..."
+  ],
+  "questions": [
+    {
+      "skill": "Inference",
+      "prompt": "Question text?",
+      "options": ["Option A", "Option B", "Option C", "Option D"],
+      "correct": 0,
+      "explanation": "Explanation of why Option A is right."
+    }
+  ]
+}`;
+        navigator.clipboard.writeText(aiPrompt).then(() => {
+          const btn = document.getElementById("btn-ts-copy-prompt");
+          btn.textContent = "✓ AI Prompt Copied!";
+          setTimeout(() => (btn.textContent = "📋 Copy AI Prompt Template"), 2200);
+        });
+      });
+
+      // Import JSON Passage(s)
+      document.getElementById("btn-ts-import-json").addEventListener("click", () => {
+        const raw = document.getElementById("ts-json-import").value.trim();
+        const statusEl = document.getElementById("ts-status-msg");
+        if (!raw) {
+          statusEl.style.color = "var(--danger)";
+          statusEl.textContent = "Please paste a valid JSON passage object or array first.";
+          return;
+        }
+        try {
+          const parsed = JSON.parse(raw);
+          const items = Array.isArray(parsed) ? parsed : [parsed];
+          let addedCount = 0;
+
+          items.forEach(item => {
+            if (!item.title || !item.level || !Array.isArray(item.paragraphs) || !Array.isArray(item.questions)) {
+              throw new Error("Missing required fields (title, level, paragraphs, or questions).");
+            }
+            if (!item.id) item.id = "custom-" + Date.now() + "-" + Math.floor(Math.random() * 1000);
+            PASSAGE_BANK.push(item);
+            addedCount++;
+          });
+
+          // Save custom additions to localStorage
+          const existingCustom = JSON.parse(localStorage.getItem(CUSTOM_BANK_KEY) || "[]");
+          localStorage.setItem(CUSTOM_BANK_KEY, JSON.stringify(existingCustom.concat(items)));
+
+          document.getElementById("ts-json-import").value = "";
+          statusEl.style.color = "var(--success)";
+          statusEl.textContent = `✓ Successfully added ${addedCount} passage(s)! Click 'Download Updated readcraft.html File' to share with students.`;
+          refreshTeacherStudio();
+        } catch (err) {
+          statusEl.style.color = "var(--danger)";
+          statusEl.textContent = `JSON Error: ${err.message}`;
+        }
+      });
+
+      // Export Updated Single-File HTML
+      document.getElementById("btn-ts-export-html").addEventListener("click", () => {
+        const fullHtml = "<!DOCTYPE html>\n" + document.documentElement.outerHTML;
+        const startMarker = "/*__PASSAGE_DATA_START__*/";
+        const endMarker = "/*__PASSAGE_DATA_END__*/";
+        const startIdx = fullHtml.indexOf(startMarker);
+        const endIdx = fullHtml.indexOf(endMarker);
+
+        if (startIdx === -1 || endIdx === -1) {
+          alert("Could not locate passage data markers for export.");
+          return;
+        }
+
+        const updatedDataBlock = `${startMarker}\n    let PASSAGE_BANK = ${JSON.stringify(PASSAGE_BANK, null, 2)};\n    ${endMarker}`;
+        const newHtml = fullHtml.slice(0, startIdx) + updatedDataBlock + fullHtml.slice(endIdx + endMarker.length);
+
+        const blob = new Blob([newHtml], { type: "text/html;charset=utf-8" });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement("a");
+        a.href = url;
+        a.download = "readcraft.html";
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        URL.revokeObjectURL(url);
+      });
+    });
+  </script>
+</body>
+</html>
